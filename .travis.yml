@@ -1,0 +1,18 @@
+branches:
+    only:
+        - develop
+
+language: node_js
+node_js:
+    - "8.9.3"
+
+before_install:
+    # Install npm 5.
+    - npm install -g npm@~5.6.0
+    - npm intall -g ionic cordova
+
+install:
+    - npm install
+
+script:
+    - npm run test #Run the Jasmine unit tests
