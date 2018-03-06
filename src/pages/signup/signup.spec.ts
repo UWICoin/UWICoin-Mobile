@@ -9,7 +9,7 @@ import { DebugElement } from '@angular/core';
 import { IonicModule, Platform, NavController, NavParams } from 'ionic-angular/index';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { LoginPage } from './login';
+import { SignupPage } from './signup';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { of } from 'rxjs/observable/of';
 
@@ -24,19 +24,19 @@ class MockNavParams {
 describe('Login page test', () => {
 
     let debugElement: DebugElement;
-    let fixture: ComponentFixture<LoginPage>;
-    let component: LoginPage;
+    let fixture: ComponentFixture<SignupPage>;
+    let component: SignupPage;
     let provider: AuthenticationProvider;
     let spy: any;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [LoginPage],
+            declarations: [SignupPage],
             imports: [
                 AngularFireModule.initializeApp(FIREBASE_CONFIG),
                 AngularFireAuthModule,
                 AngularFirestoreModule,
-                IonicModule.forRoot(LoginPage),
+                IonicModule.forRoot(SignupPage),
                 FormsModule,
                 ReactiveFormsModule
             ],
@@ -50,7 +50,7 @@ describe('Login page test', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(LoginPage);
+        fixture = TestBed.createComponent(SignupPage);
         debugElement = fixture.debugElement;
         component = fixture.componentInstance;
         provider = debugElement.injector.get(AuthenticationProvider);
@@ -65,7 +65,7 @@ describe('Login page test', () => {
         spy = null;
     });
 
-    it('it should create the login page', () => {
+    it('it should create the signup page', () => {
         expect(component).toBeDefined();
     });
 
@@ -83,36 +83,73 @@ describe('Login page test', () => {
 
     it('should expect the email testemail@gmail.com to be invalid', () => {
         let email = 'testemail@gmail.com';
-        let emailCtrl = component.loginForm.controls['email'];
+        let emailCtrl = component.signupForm.controls['email'];
         emailCtrl.setValue(email);
 
         expect(emailCtrl.value).toEqual(email);
         expect(emailCtrl.valid).toBeFalsy();
         expect(emailCtrl.getError('wrongDomain')).toBeTruthy();
-        expect(component.loginForm.valid).toBeFalsy();
+        expect(component.signupForm.valid).toBeFalsy();
     });
 
-    it('should expect the email testemail@my.uwi.edu to be valid', () => {
+    it('should expect the email testemail@my.uwi.edu to be invalid', () => {
         let email = 'testemail@my.uwi.edu';
-        let emailCtrl = component.loginForm.controls['email'];
+        let emailCtrl = component.signupForm.controls['email'];
         emailCtrl.setValue(email);
 
         expect(emailCtrl.value).toEqual(email);
-        expect(emailCtrl.valid).toBeTruthy();
-        expect(emailCtrl.getError('wrongDomain')).toBeNull();
-        expect(component.loginForm.valid).toBeFalsy();
+        expect(emailCtrl.valid).toBeFalsy();
+        expect(emailCtrl.getError('wrongDomain')).toBeUndefined();
+        expect(component.signupForm.valid).toBeFalsy();
     });
 
-    it('should expect the login form to be valid', () => {
-        let email = 'testemail@my.uwi.edu';;
-        let password = 'password1';
-        let emailCtrl = component.loginForm.controls['email'];
-        let passwordCtrl = component.loginForm.controls['password'];
+    it('should expect email to be valid if the full name is a set subset of its value', () => {
+        let fullName = 'John Doe';
+        let email = 'john.doe@my.uwi.edu';
 
+        let nameCtrl = component.signupForm.controls['fullName'];
+        let emailCtrl = component.signupForm.controls['email'];
+
+        nameCtrl.setValue(fullName);
         emailCtrl.setValue(email);
-        passwordCtrl.setValue(password);
 
-        expect(component.loginForm.valid).toBeTruthy();
+        expect(nameCtrl.value).toEqual(fullName);
+        expect(emailCtrl.value).toEqual(email);
+        expect(nameCtrl.valid).toBeTruthy();
+        expect(emailCtrl.valid).toBeTruthy()
+    });
+
+    it('should expect a password mismatch to be invalid', () => {
+        let password1 = 'password1';
+        let password2 = 'password2';
+
+        let passwordCtrl = component.signupForm.controls['password'];
+        let confirmPasswordCtrl = component.signupForm.controls['confirmPassword'];
+
+        passwordCtrl.setValue(password1);
+        confirmPasswordCtrl.setValue(password2);
+
+        expect(passwordCtrl.value).toEqual(password1);
+        expect(confirmPasswordCtrl.value).toEqual(password2);
+        expect(passwordCtrl.valid).toBeTruthy();
+        expect(confirmPasswordCtrl.valid).toBeFalsy();
+        expect(confirmPasswordCtrl.hasError('mismatch')).toBeTruthy();
+    });
+
+    it('should expect passwords to match and valid', () => {
+        let password1 = 'password1';
+        let password2 = 'password1';
+
+        let passwordCtrl = component.signupForm.controls['password'];
+        let confirmPasswordCtrl = component.signupForm.controls['confirmPassword'];
+
+        passwordCtrl.setValue(password1);
+        confirmPasswordCtrl.setValue(password2);
+
+        expect(passwordCtrl.value).toEqual(password1);
+        expect(confirmPasswordCtrl.value).toEqual(password2);
+        expect(passwordCtrl.valid).toBeTruthy();
+        expect(confirmPasswordCtrl.valid).toBeTruthy();
     });
 
 });
