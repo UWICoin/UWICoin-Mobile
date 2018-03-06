@@ -1,14 +1,19 @@
 <ion-menu [content]="content">
   <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
+    <ion-toolbar color="primary">
+      <ion-title>UWICoin</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
     <ion-list>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+        <ion-icon color="primary" name={{p.icon}} item-left></ion-icon>
         {{p.title}}
+      </button>
+      <button ion-item (click)="logout()">
+        <ion-icon color="primary" name="exit" item-left></ion-icon>
+        Logout
       </button>
     </ion-list>
   </ion-content>

@@ -10,15 +10,20 @@ import { Nav, Platform } from 'ionic-angular';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = 'Page1';
+  rootPage: string = 'LoginPage';
 
-  pages: Array<{ title: string, component: any }>;
+  pages: Page[];
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
-    // used for an example of ngFor and navigation
+  constructor(public platform: Platform,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen) {
+
     this.pages = [
-      { title: 'Page One', component: 'Page1' },
-      { title: 'Page Two', component: 'Page2' }
+      { title: 'Dashboard', component: 'DashboardPage', icon: 'home' },
+      { title: 'Pay', component: 'PaymentPage', icon: 'cash' },
+      { title: 'Transactions', component: 'TransactionsPage', icon: 'swap' },
+      { title: 'Outlets', component: 'OutletsPage', icon: 'cart' },
+      { title: 'Settings', component: 'SettingsPage', icon: 'settings' },
     ];
 
   }
@@ -32,9 +37,19 @@ export class MyApp {
     });
   }
 
+  logout() {
+    
+  }
+
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+}
+
+export interface Page {
+  title: string;
+  component: string;
+  icon?: string;
 }
