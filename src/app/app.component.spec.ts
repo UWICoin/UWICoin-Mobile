@@ -1,3 +1,6 @@
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireModule } from 'angularfire2';
 import { async, TestBed } from '@angular/core/testing';
 import { IonicModule, Platform } from 'ionic-angular';
 
@@ -5,11 +8,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { MyApp } from './app.component';
+import { AuthenticationProvider } from '../providers/authentication/authentication';
 import {
   PlatformMock,
   StatusBarMock,
   SplashScreenMock
 } from '../../test-config/mocks-ionic';
+import { FIREBASE_CONFIG } from '../firebase.config';
 
 describe('MyApp Component', () => {
   let fixture;
@@ -19,12 +24,16 @@ describe('MyApp Component', () => {
     TestBed.configureTestingModule({
       declarations: [MyApp],
       imports: [
-        IonicModule.forRoot(MyApp)
+        IonicModule.forRoot(MyApp),
+        AngularFireModule.initializeApp(FIREBASE_CONFIG),
+        AngularFireAuthModule,
+        AngularFirestoreModule,
       ],
       providers: [
         { provide: StatusBar, useClass: StatusBarMock },
         { provide: SplashScreen, useClass: SplashScreenMock },
-        { provide: Platform, useClass: PlatformMock }
+        { provide: Platform, useClass: PlatformMock },
+        AuthenticationProvider
       ]
     })
   }));
@@ -37,9 +46,5 @@ describe('MyApp Component', () => {
   it('should be created', () => {
     expect(component instanceof MyApp).toBe(true);
   });
-
-  // it('should have two pages', () => {
-  //   expect(component.pages.length).toBe(10);
-  // });
 
 });
