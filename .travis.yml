@@ -9,7 +9,7 @@ node_js:
 before_install:
     # Install npm 5.
     - npm install -g npm@~5.6.0
-    - npm intall -g ionic cordova
+    - npm install -g ionic cordova
 
 install:
     - npm install
