@@ -1,12 +1,8 @@
+import { AuthenticationProvider } from './../../providers/authentication/authentication';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { emailDomainValidator } from '../../validators/authentication/email/email-validator';
 
 @IonicPage()
 @Component({
@@ -15,11 +11,52 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  loginForm: FormGroup;
+
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public authProvider: AuthenticationProvider,
+    public formBuilder: FormBuilder) {
+
+    this.loginForm = this.formBuilder.group({
+      'email': [null, Validators.compose([Validators.required, Validators.email, emailDomainValidator])],
+      'password': [null, Validators.compose([Validators.required])]
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
+  ionViewCanEnter() {
+    return !this.authProvider.isAuthenticated();
+  }
+
+  forgotPassword(): void {
+    // Direct the user to a password reset page to enter email to verify password
+    this.navCtrl.push('PasswordResetPage');
+  }
+
+  goToSignUp(): void {
+    this.navCtrl.setRoot('SignupPage');
+  }
+
+  login(user: any): void {
+    console.log('Login clicked');
+    this.authProvider.login(user).then((result) => {
+
+      if(this.authProvider.isAuthenticated()) {
+        this.navCtrl.setRoot('DashboardPage');
+      }
+      else {
+        this.showError('Please verify your email to continue');
+      }
+    }, error => {
+      this.showError(error);
+    });
+  }
+
+  showError(error) {
+    console.error(error);
+  }
 }

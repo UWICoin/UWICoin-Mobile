@@ -11,7 +11,7 @@ export function emailDomainValidator(ac: AbstractControl) {
       return null;
     }
   }
-  return { 'invalid': true };
+  return { 'wrongDomain': true };
 }
 
 
