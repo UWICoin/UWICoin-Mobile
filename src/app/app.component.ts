@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, MenuController } from 'ionic-angular';
+import { AuthenticationProvider } from '../providers/authentication/authentication';
 
 
 @Component({
@@ -16,7 +17,9 @@ export class MyApp {
 
   constructor(public platform: Platform,
     public statusBar: StatusBar,
-    public splashScreen: SplashScreen) {
+    public splashScreen: SplashScreen,
+    public authProvider: AuthenticationProvider,
+    public menuCtrl: MenuController) {
 
     this.pages = [
       { title: 'Dashboard', component: 'DashboardPage', icon: 'home' },
@@ -38,7 +41,12 @@ export class MyApp {
   }
 
   logout() {
-    
+    this.authProvider.logout().then(() => {
+      this.menuCtrl.close();
+      this.nav.setRoot('LoginPage').then(() => {
+        // Show toast to verify email
+      });
+    })
   }
 
   openPage(page) {

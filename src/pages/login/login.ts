@@ -43,13 +43,12 @@ export class LoginPage {
 
   login(user: any): void {
     console.log('Login clicked');
-    this.authProvider.login(user).then((result) => {
-
-      if(this.authProvider.isAuthenticated()) {
+    this.authProvider.login(user).then((user) => {
+      if(user.emailVerified) {
         this.navCtrl.setRoot('DashboardPage');
       }
       else {
-        this.showError('Please verify your email to continue');
+        this.showError('Verify your email to continue');
       }
     }, error => {
       this.showError(error);
