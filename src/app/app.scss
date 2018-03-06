@@ -14,3 +14,37 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+form {
+    padding: 0 10px;
+}
+
+ion-icon {
+
+    // All icons except the menu icon
+    &:not([name="menu"]) {
+        color: color($colors, primary);
+    }
+
+    &[name="checkmark-circle"] {
+        color: rgb(45, 207, 113);
+    }
+
+    &[name="close-circle"] {
+        color: rgb(235, 35, 58);
+    }
+}
+
+.input-item {
+    padding: 8px 0;
+}
+
+.logo-container {
+    padding: 25px 0;
+    text-align: center;
+
+    .authentication-logo {
+        width: 120px;
+        height: 120px;
+    }
+}
