@@ -2,6 +2,7 @@ import { AuthenticationProvider } from './../../providers/authentication/authent
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { emailDomainValidator } from '../../validators/authentication/email/email-validator';
 
 @IonicPage()
 @Component({
@@ -18,7 +19,7 @@ export class PasswordResetPage {
     public authProvider: AuthenticationProvider) {
 
     this.resetForm = this.formBuilder.group({
-      'email': [null, Validators.compose([Validators.required, Validators.email])]
+      'email': [null, Validators.compose([Validators.required, Validators.email, emailDomainValidator])]
     });
   }
 
