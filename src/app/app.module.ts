@@ -6,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { AuthenticationProvider } from './../providers/authentication/authentication';
 
@@ -22,7 +23,9 @@ import { FIREBASE_CONFIG } from './../firebase.config';
     AngularFireAuthModule,
     AngularFirestoreModule,
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    FormsModule,
+    IonicModule.forRoot(MyApp),
+    ReactiveFormsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
