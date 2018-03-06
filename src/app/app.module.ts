@@ -7,6 +7,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
+import { AuthenticationProvider } from './../providers/authentication/authentication';
+
 import { MyApp } from './app.component';
 
 import { FIREBASE_CONFIG } from './../firebase.config';
@@ -27,6 +29,7 @@ import { FIREBASE_CONFIG } from './../firebase.config';
     MyApp
   ],
   providers: [
+    AuthenticationProvider,
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
