@@ -21,7 +21,7 @@ before_script:
 install:
     - npm install
 script:
-    - npm run test #Run the Jasmine unit tests
+    - npm run test-ci #Run the Jasmine unit tests
 addons:
     - chrome: 
         - stable
