@@ -21,7 +21,7 @@ class MockNavParams {
     }
 }
 
-describe('Login page test', () => {
+describe('Signup page test', () => {
 
     let debugElement: DebugElement;
     let fixture: ComponentFixture<SignupPage>;
@@ -92,15 +92,19 @@ describe('Login page test', () => {
         expect(component.signupForm.valid).toBeFalsy();
     });
 
-    it('should expect the email testemail@my.uwi.edu to be invalid', () => {
-        let email = 'testemail@my.uwi.edu';
-        let emailCtrl = component.signupForm.controls['email'];
-        emailCtrl.setValue(email);
+    it('should expect email to be invalid if the full name is not a subset of its value', () => {
+        let fullName = 'Jane Doe';
+        let email = 'john.doe@my.uwi.edu';
 
+        let nameCtrl = component.signupForm.controls['fullName'];
+        let emailCtrl = component.signupForm.controls['email'];
+
+        nameCtrl.setValue(fullName);
+        emailCtrl.setValue(email);
+        expect(nameCtrl.value).toEqual(fullName);
         expect(emailCtrl.value).toEqual(email);
+        expect(nameCtrl.valid).toBeTruthy();
         expect(emailCtrl.valid).toBeFalsy();
-        expect(emailCtrl.getError('wrongDomain')).toBeUndefined();
-        expect(component.signupForm.valid).toBeFalsy();
     });
 
     it('should expect email to be valid if the full name is a set subset of its value', () => {
