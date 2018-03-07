@@ -11,6 +11,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { PasswordResetPage } from './password-reset';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
+import { ToastProvider } from '../../providers/toast/toast';
 
 class MockNavParams {
     data = {};
@@ -43,6 +44,7 @@ describe('Password reset page test', () => {
                 AuthenticationProvider,
                 FormBuilder,
                 NavController,
+                ToastProvider,
                 { provide: NavParams, useClass: MockNavParams }
             ]
         }).compileComponents();

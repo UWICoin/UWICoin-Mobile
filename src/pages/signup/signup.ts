@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { emailDomainValidator, emailMatchValidator } from '../../validators/authentication/email/email-validator';
 import { passwordMatchValidator } from '../../validators/authentication/password/password-validator';
+import { ToastProvider } from '../../providers/toast/toast';
 
 @IonicPage()
 @Component({
@@ -17,6 +18,7 @@ export class SignupPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public authProvider: AuthenticationProvider,
+    public toastProvider: ToastProvider,
     public formBuilder: FormBuilder) {
 
     this.signupForm = this.formBuilder.group({
@@ -35,10 +37,12 @@ export class SignupPage {
     return !this.authProvider.isAuthenticated();
   }
 
+  // Sends the user to the login page
   goToLogin() {
     this.navCtrl.setRoot('LoginPage');
   }
 
+  // Registers a user using their given details
   signup(user: any) {
     this.authProvider.signup(user).then(result => {
 
@@ -50,7 +54,7 @@ export class SignupPage {
         console.log('The user is not authenticated');
         this.authProvider.logout().then(() => {
           this.navCtrl.setRoot('LoginPage').then(() => {
-            // Show toast to verify email to continue
+            this.toastProvider.showToast('Verify your email to continue');
           });
         })
       }
@@ -59,7 +63,26 @@ export class SignupPage {
     });
   }
 
+  // Shows a toast with an error based on firebase error codes
   showError(error) {
+    // Error codes at https://firebase.google.com/docs/reference/js/firebase.auth.Auth#createUserWithEmailAndPassword
+    switch (error.code) {
+      case 'auth/email-already-in-use':
+        this.toastProvider.showToast('Email already in use');
+        break;
+      case 'auth/invalid-email':
+        this.toastProvider.showToast('Invalid email');
+        break;
+      case 'auth/operation-not-allowed':
+        this.toastProvider.showToast('Operation not allowed');
+        break;
+      case 'auth/weak-password':
+        this.toastProvider.showToast('Weak password');
+        break;
+      default:
+        this.toastProvider.showToast('Error creating user');
+        break;
+    }
     console.error(error);
   }
 

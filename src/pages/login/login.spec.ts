@@ -11,6 +11,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPage } from './login';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
+import { ToastProvider } from '../../providers/toast/toast';
 import { of } from 'rxjs/observable/of';
 
 class MockNavParams {
@@ -42,6 +43,7 @@ describe('Login page test', () => {
             ],
             providers: [
                 AuthenticationProvider,
+                ToastProvider,
                 FormBuilder,
                 NavController,
                 { provide: NavParams, useClass: MockNavParams }

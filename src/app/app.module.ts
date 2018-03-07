@@ -13,6 +13,7 @@ import { AuthenticationProvider } from './../providers/authentication/authentica
 import { MyApp } from './app.component';
 
 import { FIREBASE_CONFIG } from './../firebase.config';
+import { ToastProvider } from '../providers/toast/toast';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { FIREBASE_CONFIG } from './../firebase.config';
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
+    ToastProvider,
   ]
 })
 export class AppModule { }
