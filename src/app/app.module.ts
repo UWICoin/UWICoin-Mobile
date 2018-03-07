@@ -7,6 +7,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ComponentsModule } from '../components/components.module';
 
 import { AuthenticationProvider } from './../providers/authentication/authentication';
 
@@ -24,6 +25,7 @@ import { ToastProvider } from '../providers/toast/toast';
     AngularFireAuthModule,
     AngularFirestoreModule,
     BrowserModule,
+    ComponentsModule,
     FormsModule,
     IonicModule.forRoot(MyApp),
     ReactiveFormsModule
