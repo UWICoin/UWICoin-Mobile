@@ -1,3 +1,4 @@
+import { UserSummaryComponent } from './../components/user-summary/user-summary';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
@@ -14,6 +15,7 @@ import {
   StatusBarMock,
   SplashScreenMock
 } from '../../test-config/mocks-ionic';
+import {}from 'jasmine';
 import { FIREBASE_CONFIG } from '../firebase.config';
 
 describe('MyApp Component', () => {
@@ -22,7 +24,10 @@ describe('MyApp Component', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MyApp],
+      declarations: [
+        MyApp,
+        UserSummaryComponent
+      ],
       imports: [
         IonicModule.forRoot(MyApp),
         AngularFireModule.initializeApp(FIREBASE_CONFIG),
