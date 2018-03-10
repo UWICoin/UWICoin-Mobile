@@ -1,13 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-/**
- * Generated class for the PaymentPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-payment',
@@ -15,7 +8,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class PaymentPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  qrcode = {
+    value: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59',
+    scale: 10,
+    imgwidth: 500,
+    refresh: 10
+  };
+
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams) {
+      
   }
 
   ionViewDidLoad() {
