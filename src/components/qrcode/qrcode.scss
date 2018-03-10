@@ -1,0 +1,22 @@
+qrcode {
+    #qrcode {
+        display: inline-block;
+        position: relative;
+        margin: 25px 25px 0 25px;
+    }
+
+/* Adds a logo to the center of the qr code */
+    #qrcode::before{
+        position: absolute;
+        display: block;
+        content: '';
+        width: 25%;
+        height: 25%;
+        top: 50%;
+        left: 50%;
+        margin: -12.5% 0 0 -12.5%;
+        background: url('/assets/imgs/icon.png');
+        background-size: contain;
+        // background-color: pink;
+    }
+}
