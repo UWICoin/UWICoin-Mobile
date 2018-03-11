@@ -3,6 +3,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Nav, Platform, MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../providers/authentication/authentication';
+import { Page } from '../models/page/page.models';
 
 
 @Component({
@@ -56,8 +57,3 @@ export class MyApp {
   }
 }
 
-export interface Page {
-  title: string;
-  component: string;
-  icon?: string;
-}
