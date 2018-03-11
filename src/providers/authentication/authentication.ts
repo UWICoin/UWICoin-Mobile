@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
+import { User } from '../../models/user/user.models';
+import { Roles } from './../../models/roles/roles.models';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 @Injectable()
 export class AuthenticationProvider {
 
   user: firebase.User;
 
-  constructor(private db: AngularFirestore,
-    private afAuth: AngularFireAuth) {
+  constructor(private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
+    private db: AngularFireDatabase) {
 
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.user = user;
-        console.log('Is email verified: ' + user.emailVerified);
+        // console.log(JSON.stringify(user));
       }
       else {
         this.user = null;
@@ -30,7 +34,7 @@ export class AuthenticationProvider {
     return this.user != null && this.user.emailVerified;
   }
 
-  public login(user: any): Promise<any> {
+  public login(user: User): Promise<any> {
     return this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password);
   }
 
@@ -38,14 +42,15 @@ export class AuthenticationProvider {
     return this.afAuth.auth.signOut();
   }
 
-  public signup(user: any): Promise<any> {
-    return this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password).then(result => {
-      this.afAuth.auth.currentUser.sendEmailVerification();
-    });
+  public signup(email: string, password: string): Promise<any> {
+    return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
 
-  public updateUserData() {
-    
+  public updateUserData(user: User) {
+    if (user) {
+      const userRef = this.db.object<User>(`users/${user.uid}`);
+      return userRef.update(user);
+    }
   }
 
 }

@@ -1,3 +1,4 @@
+import { User } from './../../models/user/user.models';
 import { AuthenticationProvider } from './../../providers/authentication/authentication';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component } from '@angular/core';
@@ -5,6 +6,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { emailDomainValidator, emailMatchValidator } from '../../validators/authentication/email/email-validator';
 import { passwordMatchValidator } from '../../validators/authentication/password/password-validator';
 import { ToastProvider } from '../../providers/toast/toast';
+import { Roles } from '../../models/roles/roles.models';
+import * as firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -14,6 +17,11 @@ import { ToastProvider } from '../../providers/toast/toast';
 export class SignupPage {
 
   signupForm: FormGroup;
+
+  fullName: string = 'Darion Hernandez';
+  email: string = 'darion.hernandez@my.uwi.edu';
+  password: string = 'password1';
+  confirmPassword: string = 'password1';
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -42,16 +50,30 @@ export class SignupPage {
     this.navCtrl.setRoot('LoginPage');
   }
 
-  // Registers a user using their given details
-  signup(user: any) {
-    this.authProvider.signup(user).then(result => {
+  // Creates and returns a user object using the given data and form information
+  setUserData(data: firebase.User) {
+    let user: User = {
+      email: this.email,
+      full_name: this.fullName,
+      uid: data.uid,
+      role: Roles.student_general,
+    }
+    return user;
+  }
 
-      if (this.authProvider.isAuthenticated()) {
-        console.log('The user is authenticated');
+  // Registers a user using their given details
+  signup() {
+
+    this.authProvider.signup(this.email, this.password).then(user => {
+
+      let data = this.setUserData(user);
+      user.sendEmailVerification(); // sends an email to the user to verify their email address
+      this.authProvider.updateUserData(data); // stores the user's information to firebase
+
+      if (user.emailVerified) {
         this.navCtrl.setRoot('DashboardPage');
       }
       else {
-        console.log('The user is not authenticated');
         this.authProvider.logout().then(() => {
           this.navCtrl.setRoot('LoginPage').then(() => {
             this.toastProvider.showToast('Verify your email to continue');

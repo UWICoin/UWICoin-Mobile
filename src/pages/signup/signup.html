@@ -4,12 +4,12 @@
     <img src="assets/imgs/icon.png" alt="UWICoin" class="authentication-logo">
   </div>
 
-  <form [formGroup]="signupForm" (ngSubmit)="signup(signupForm.value)">
+  <form [formGroup]="signupForm" (ngSubmit)="signup()" novalidate>
 
     <!-- Full Name input -->
     <div class="input-item">
       <ion-item>
-        <ion-input id="full-name" type="text" formControlName="fullName" placeholder="Full Name"></ion-input>
+        <ion-input id="full-name" type="text" [(ngModel)]="fullName" formControlName="fullName" placeholder="Full Name"></ion-input>
         <ion-icon name="contact" item-left></ion-icon>
         <ion-icon *ngIf="signupForm.controls['fullName'].valid" name="checkmark-circle" item-right small></ion-icon>
         <ion-icon *ngIf="!signupForm.controls['fullName'].valid && signupForm.controls['fullName'].touched" name="close-circle" item-right
@@ -20,7 +20,7 @@
     <!-- Email input -->
     <div class="input-item">
       <ion-item>
-        <ion-input id="email" type="text" formControlName="email" placeholder="UWI Email"></ion-input>
+        <ion-input id="email" type="text" [(ngModel)]="email" formControlName="email" placeholder="UWI Email"></ion-input>
         <ion-icon name="mail" item-left></ion-icon>
         <ion-icon *ngIf="signupForm.controls['email'].valid" name="checkmark-circle" item-right small></ion-icon>
         <ion-icon *ngIf="!signupForm.controls['email'].valid && signupForm.controls['email'].touched" name="close-circle" item-right
@@ -31,7 +31,7 @@
     <!-- Password input -->
     <div class="input-item">
       <ion-item>
-        <ion-input id="password" type="password" formControlName="password" placeholder="Password"></ion-input>
+        <ion-input id="password" type="password" [(ngModel)]="password" formControlName="password" placeholder="Password"></ion-input>
         <ion-icon name="lock" item-left></ion-icon>
         <ion-icon *ngIf="signupForm.controls['password'].valid" name="checkmark-circle" item-right small></ion-icon>
         <ion-icon *ngIf="!signupForm.controls['password'].valid && signupForm.controls['password'].touched" name="close-circle" item-right
@@ -42,7 +42,7 @@
     <!-- Confirm Password input -->
     <div class="input-item">
       <ion-item>
-        <ion-input id="confirm-password" type="password" formControlName="confirmPassword" placeholder="Confirm Password"></ion-input>
+        <ion-input id="confirm-password" type="password" [(ngModel)]="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password"></ion-input>
         <ion-icon name="lock" item-left></ion-icon>
         <ion-icon *ngIf="signupForm.controls['confirmPassword'].valid" name="checkmark-circle" item-right small></ion-icon>
         <ion-icon *ngIf="!signupForm.controls['confirmPassword'].valid && signupForm.controls['confirmPassword'].touched" name="close-circle"
