@@ -4,12 +4,15 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Transactions</ion-title>
+    <ion-title>Settings</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
+    <ion-icon color="primary" name={{p.icon}} item-left></ion-icon>
+    {{p.title}}
+  </button>
 </ion-content>

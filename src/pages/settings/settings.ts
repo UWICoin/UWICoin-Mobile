@@ -1,12 +1,6 @@
+import { Page } from './../../models/page/page.models';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the SettingsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -15,11 +9,23 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class SettingsPage {
 
+  pages: Page[];
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+
+    this.pages = [
+      { title: 'Account', component: 'AccountPage', icon: 'key' },
+      { title: 'Notifications', 'component': 'NotificationsPage', icon: 'notifications' },
+      { title: 'Help', 'component': 'HelpPage', icon: 'help-circle'}
+    ]
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
+  }
+
+  openPage(page: Page) {
+    this.navCtrl.push(page.component);
   }
 
 }
