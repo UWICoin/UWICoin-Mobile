@@ -11,7 +11,7 @@ export class PaymentPage {
   qrcode = {
     value: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59',
     scale: 10,
-    imgwidth: 500,
+    imgwidth: 400,
     refresh: 10
   };
 
