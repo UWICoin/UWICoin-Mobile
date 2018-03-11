@@ -1,5 +1,5 @@
 import { UserSummaryComponent } from './../components/user-summary/user-summary';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 import { async, TestBed } from '@angular/core/testing';
@@ -32,7 +32,7 @@ describe('MyApp Component', () => {
         IonicModule.forRoot(MyApp),
         AngularFireModule.initializeApp(FIREBASE_CONFIG),
         AngularFireAuthModule,
-        AngularFirestoreModule,
+        AngularFireDatabaseModule,
       ],
       providers: [
         { provide: StatusBar, useClass: StatusBarMock },

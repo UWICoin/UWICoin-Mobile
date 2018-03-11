@@ -1,4 +1,4 @@
-import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { FIREBASE_CONFIG } from './../../firebase.config';
 import { AngularFireModule } from 'angularfire2';
@@ -36,7 +36,7 @@ describe('Signup page test', () => {
             imports: [
                 AngularFireModule.initializeApp(FIREBASE_CONFIG),
                 AngularFireAuthModule,
-                AngularFirestoreModule,
+                AngularFireDatabaseModule,
                 IonicModule.forRoot(SignupPage),
                 FormsModule,
                 ReactiveFormsModule
