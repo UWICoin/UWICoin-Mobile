@@ -15,7 +15,7 @@ import {
   StatusBarMock,
   SplashScreenMock
 } from '../../test-config/mocks-ionic';
-import {}from 'jasmine';
+import { } from 'jasmine';
 import { FIREBASE_CONFIG } from '../firebase.config';
 
 describe('MyApp Component', () => {

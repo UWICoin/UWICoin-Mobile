@@ -14,6 +14,9 @@ export class LoginPage {
 
   loginForm: FormGroup;
 
+  email: string = '';
+  password: string = '';
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public authProvider: AuthenticationProvider,
@@ -45,9 +48,8 @@ export class LoginPage {
   }
 
   // Logs the user in with their uwi email and password, then directs them to their dashboard
-  login(user: any): void {
-    console.log('Login clicked');
-    this.authProvider.login(user).then((user) => {
+  login(): void {
+    this.authProvider.login(this.email, this.password).then((user) => {
       if (user.emailVerified) {
         this.navCtrl.setRoot('DashboardPage');
       }

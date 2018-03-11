@@ -2,27 +2,34 @@
     <div class="logo-container">
         <img src="assets/imgs/icon.png" alt="UWICoin" class="authentication-logo">
     </div>
-    <form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value)">
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+        <!-- Email Input -->
         <div class="input-item">
             <ion-item>
-                <ion-input id="login-email" type="email" formControlName="email" placeholder="UWI Email"></ion-input>
+                <ion-input id="login-email" type="email" [(ngModel)]="email" formControlName="email" placeholder="UWI Email"></ion-input>
                 <ion-icon name="mail" item-left></ion-icon>
                 <ion-icon *ngIf="loginForm.controls['email'].valid" name="checkmark-circle" item-right small></ion-icon>
                 <ion-icon *ngIf="!loginForm.controls['email'].valid && loginForm.controls['email'].touched" name="close-circle" item-right small></ion-icon>
             </ion-item>
         </div>
+
+        <!-- Password Input -->
         <div class="input-item">
             <ion-item>
-                <ion-input id="login-password" type="password" formControlName="password" placeholder="Password"></ion-input>
+                <ion-input id="login-password" type="password" [(ngModel)]="password" formControlName="password" placeholder="Password"></ion-input>
                 <ion-icon name="lock" item-left></ion-icon>
                 <ion-icon *ngIf="loginForm.controls['password'].valid" name="checkmark-circle" item-right small></ion-icon>
                 <ion-icon *ngIf="!loginForm.controls['password'].valid && loginForm.controls['password'].touched" name="close-circle" item-right small></ion-icon>
             </ion-item>
         </div>
+
+        <!-- Submit Button -->
         <div class="input-item">
             <button click="test()" type="submit" [disabled]="!loginForm.valid" color="primary" ion-button block>Log in</button>
             <p class="no-account">Don't have an account? <strong (click)="goToSignUp()" style="cursor: pointer;">Create one now!</strong></p>
         </div>
+
     </form>
     <div class="forgot-password">
         <p (click)="forgotPassword()">Forgot password?</p>

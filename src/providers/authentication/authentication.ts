@@ -1,18 +1,16 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 import { User } from '../../models/user/user.models';
 import { Roles } from './../../models/roles/roles.models';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
 
 @Injectable()
 export class AuthenticationProvider {
 
   user: firebase.User;
 
-  constructor(private afs: AngularFirestore,
-    private afAuth: AngularFireAuth,
+  constructor(private afAuth: AngularFireAuth,
     private db: AngularFireDatabase) {
 
     this.afAuth.authState.subscribe(user => {
@@ -34,8 +32,8 @@ export class AuthenticationProvider {
     return this.user != null && this.user.emailVerified;
   }
 
-  public login(user: User): Promise<any> {
-    return this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password);
+  public login(email: string, password: string): Promise<any> {
+    return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
   public logout(): Promise<any> {
@@ -48,7 +46,7 @@ export class AuthenticationProvider {
 
   public updateUserData(user: User) {
     if (user) {
-      const userRef = this.db.object<User>(`users/${user.uid}`);
+      const userRef: AngularFireObject<User> = this.db.object<User>(`users/${user.uid}`);
       return userRef.update(user);
     }
   }
