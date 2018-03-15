@@ -3,7 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
 import { User } from '../../models/user/user.models';
 import { Roles } from './../../models/roles/roles.models';
-import { AngularFireDatabase, AngularFireObject } from 'angularfire2/database';
+import { DatabaseProvider } from '../database/database';
 
 @Injectable()
 export class AuthenticationProvider {
@@ -11,12 +11,12 @@ export class AuthenticationProvider {
   user: firebase.User;
 
   constructor(private afAuth: AngularFireAuth,
-    private db: AngularFireDatabase) {
+    private db: DatabaseProvider) {
+      
 
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.user = user;
-        // console.log(JSON.stringify(user));
       }
       else {
         this.user = null;
@@ -46,8 +46,7 @@ export class AuthenticationProvider {
 
   public updateUserData(user: User) {
     if (user) {
-      const userRef: AngularFireObject<User> = this.db.object<User>(`users/${user.uid}`);
-      return userRef.update(user);
+      return this.db.updateObject(`users/${user.uid}`, user);
     }
   }
 
