@@ -42,7 +42,7 @@ export class SignupPage {
   }
 
   ionViewCanEnter() {
-
+    return !this.authProvider.isAuthenticated();
   }
 
   // Sends the user to the login page

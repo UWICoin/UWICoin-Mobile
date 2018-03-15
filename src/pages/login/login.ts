@@ -34,7 +34,7 @@ export class LoginPage {
   }
 
   ionViewCanEnter() {
-    
+    return !this.authProvider.isAuthenticated();
   }
 
   // Sends the user to a password reset page to enter email to verify password

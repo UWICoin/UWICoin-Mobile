@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AuthenticationProvider } from '../../providers/authentication/authentication';
 
 @IonicPage()
 @Component({
@@ -14,6 +15,10 @@ export class HelpPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HelpPage');
+  }
+
+  ionViewCanEnter(){
+    return this.authProvider.isAuthenticated();
   }
 
 }

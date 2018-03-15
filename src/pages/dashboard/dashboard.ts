@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the DashboardPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { AuthenticationProvider } from '../../providers/authentication/authentication';
 
 @IonicPage()
 @Component({
@@ -15,11 +9,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class DashboardPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public authProvider: AuthenticationProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad DashboardPage');
+  }
+
+  ionViewCanEnter() {
+    return this.authProvider.isAuthenticated();
   }
 
 }

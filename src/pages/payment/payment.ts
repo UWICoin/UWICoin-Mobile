@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { AuthenticationProvider } from '../../providers/authentication/authentication';
 
 @IonicPage()
 @Component({
@@ -16,12 +17,17 @@ export class PaymentPage {
   };
 
   constructor(public navCtrl: NavController,
-    public navParams: NavParams) {
+    public navParams: NavParams,
+    public authProvider: AuthenticationProvider) {
       
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad PaymentPage');
+  }
+
+  ionViewCanEnter() {
+    return this.authProvider.isAuthenticated();
   }
 
 }
