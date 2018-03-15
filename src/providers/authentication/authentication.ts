@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
@@ -28,8 +29,19 @@ export class AuthenticationProvider {
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
-  public isAuthenticated(): boolean {
-    return this.user != null && this.user.emailVerified;
+  // Returns whether or not the user is authenticated
+  public isAuthenticated() {
+    return this.user ? this.user.emailVerified : false;
+  }
+
+  // Returns an observable of whether or not the user is authenticated
+  public isAuthenticated$() {
+    return this.afAuth.authState.map(auth => {
+      if (auth) {
+        return auth.emailVerified;
+      }
+      return false;
+    });
   }
 
   public login(email: string, password: string): Promise<any> {
