@@ -13,7 +13,7 @@ export class AuthenticationProvider {
 
   constructor(private afAuth: AngularFireAuth,
     private db: DatabaseProvider) {
-      
+
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.uid = user.uid;
@@ -44,7 +44,7 @@ export class AuthenticationProvider {
     const user = this.afAuth.auth.currentUser;
     if (user) {
       return user ? user.emailVerified : false;
-  }
+    }
     return false;
   }
 
