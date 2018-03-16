@@ -16,6 +16,8 @@ import { MyApp } from './app.component';
 
 import { FIREBASE_CONFIG } from './../firebase.config';
 import { ToastProvider } from '../providers/toast/toast';
+import { DatabaseProvider } from '../providers/database/database';
+import { RippleLibProvider } from '../providers/ripple-lib/ripple-lib';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,8 @@ import { ToastProvider } from '../providers/toast/toast';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     ToastProvider,
+    DatabaseProvider,
+    RippleLibProvider,
   ]
 })
 export class AppModule { }

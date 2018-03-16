@@ -1,9 +1,14 @@
+import { User } from './../models/user/user.models';
 import { Component, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Nav, Platform, MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../providers/authentication/authentication';
 import { Page } from '../models/page/page.models';
+import { RippleLibProvider } from '../providers/ripple-lib/ripple-lib';
+import { ToastProvider } from '../providers/toast/toast';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({
@@ -13,14 +18,30 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: string = 'LoginPage';
-
   pages: Page[];
+  user: User;
+  subscriptions: Subscription;
 
   constructor(public platform: Platform,
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public authProvider: AuthenticationProvider,
-    public menuCtrl: MenuController) {
+    public menuCtrl: MenuController,
+    public rippleLib: RippleLibProvider,
+    public toastProvider: ToastProvider) {
+
+    this.authProvider.isAuthenticated$().subscribe(isAuthenticated => {
+      if (isAuthenticated) {
+        this.rippleLib.connect();
+        this.authProvider.getUser$().take(1).subscribe(user => {
+          this.user = user;
+        });
+      }
+      else {
+        this.rippleLib.disconnect();
+        this.user = null;
+      }
+    });
 
     this.pages = [
       { title: 'Dashboard', component: 'DashboardPage', icon: 'home' },
@@ -41,11 +62,15 @@ export class MyApp {
     });
   }
 
+  ionViewWillUnload() {
+    this.rippleLib.disconnect();
+  }
+
   logout() {
     this.authProvider.logout().then(() => {
       this.menuCtrl.close();
       this.nav.setRoot('LoginPage').then(() => {
-        // Show toast to verify email
+        this.toastProvider.showToast('Logged out successfully');
       });
     })
   }
