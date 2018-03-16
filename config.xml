@@ -3,7 +3,7 @@
     <name>MyApp</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://169.254.80.80:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -84,5 +84,6 @@
     <plugin name="com.synconset.imagepicker" spec="~2.1.8" />
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
     <allow-navigation href="http://169.254.80.80:8100" />
-    <engine name="android" spec="~6.3.0" />
+    <plugin name="cordova-plugin-app-preferences" spec="^0.99.3" />
+    <engine name="android" spec="6.3.0" />
 </widget>
