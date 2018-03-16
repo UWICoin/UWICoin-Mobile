@@ -52,16 +52,16 @@ export class LoginPage {
     this.authProvider.login(this.email, this.password).then((user) => {
       this.authProvider.isAccountSetup$().take(1).subscribe(setup => {
         if (user.emailVerified && setup == true) {
-        this.navCtrl.setRoot('DashboardPage');
-      }
+          this.navCtrl.setRoot('DashboardPage');
+        }
         else if (user.emailVerified && setup == false) {
           this.navCtrl.setRoot('SetupAccountPage');
         }
-      else {
+        else {
           this.authProvider.logout().then(() => {
-        this.showError('Verify your email to continue');
+            this.showError('Verify your email to continue');
           });
-      }
+        }
       });
     }, error => {
       this.showError(error);
