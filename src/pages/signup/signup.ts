@@ -53,6 +53,7 @@ export class SignupPage {
   // Creates and returns a user object using the given data and form information
   setUserData(data: firebase.User) {
     let user: User = {
+      account_setup: false,
       email: this.email,
       full_name: this.fullName,
       uid: data.uid,

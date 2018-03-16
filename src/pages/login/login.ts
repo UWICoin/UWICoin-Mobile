@@ -14,8 +14,8 @@ export class LoginPage {
 
   loginForm: FormGroup;
 
-  email: string = '';
-  password: string = '';
+  email: string = 'darion.hernandez@my.uwi.edu';
+  password: string = 'password1';
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -34,7 +34,7 @@ export class LoginPage {
   }
 
   ionViewCanEnter() {
-    return !this.authProvider.isAuthenticated();
+    // return !this.authProvider.isAuthenticated();
   }
 
   // Sends the user to a password reset page to enter email to verify password
@@ -50,12 +50,19 @@ export class LoginPage {
   // Logs the user in with their uwi email and password, then directs them to their dashboard
   login(): void {
     this.authProvider.login(this.email, this.password).then((user) => {
-      if (user.emailVerified) {
+      this.authProvider.isAccountSetup$().take(1).subscribe(setup => {
+        if (user.emailVerified && setup == true) {
         this.navCtrl.setRoot('DashboardPage');
       }
+        else if (user.emailVerified && setup == false) {
+          this.navCtrl.setRoot('SetupAccountPage');
+        }
       else {
+          this.authProvider.logout().then(() => {
         this.showError('Verify your email to continue');
+          });
       }
+      });
     }, error => {
       this.showError(error);
     });
@@ -77,7 +84,7 @@ export class LoginPage {
         this.loginForm.reset(); // Clear the contents in the form
         break;
       default:
-        this.toastProvider.showToast('Invalid email or password');
+        this.toastProvider.showToast('Verify your email to continue');
         this.loginForm.reset(); // Clear the contents in the form
     }
     console.error(error);
