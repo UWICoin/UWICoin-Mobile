@@ -9,6 +9,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ComponentsModule } from '../components/components.module';
+import { Camera } from '@ionic-native/camera';
+import { ImagePicker } from '@ionic-native/image-picker';
+import { AppPreferences } from '@ionic-native/app-preferences';
 
 import { AuthenticationProvider } from './../providers/authentication/authentication';
 
@@ -39,7 +42,10 @@ import { RippleLibProvider } from '../providers/ripple-lib/ripple-lib';
     MyApp
   ],
   providers: [
+    AppPreferences,
     AuthenticationProvider,
+    Camera,
+    ImagePicker,
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
