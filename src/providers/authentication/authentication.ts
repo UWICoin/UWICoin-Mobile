@@ -9,18 +9,17 @@ import { DatabaseProvider } from '../database/database';
 @Injectable()
 export class AuthenticationProvider {
 
-  user: firebase.User;
+  uid: string;
 
   constructor(private afAuth: AngularFireAuth,
     private db: DatabaseProvider) {
       
-
     this.afAuth.authState.subscribe(user => {
       if (user) {
-        this.user = user;
+        this.uid = user.uid;
       }
       else {
-        this.user = null;
+        this.uid = null;
       }
     });
   }
@@ -29,19 +28,44 @@ export class AuthenticationProvider {
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
+  public getUser$(): Observable<User> {
+    return this.afAuth.authState.switchMap(user => {
+      if (user) {
+        return this.db.getObject(`users/${user.uid}`);
+      }
+      else {
+        return Observable.of(null);
+      }
+    });
+  }
+
   // Returns whether or not the user is authenticated
   public isAuthenticated() {
-    return this.user ? this.user.emailVerified : false;
+    const user = this.afAuth.auth.currentUser;
+    if (user) {
+      return user ? user.emailVerified : false;
+  }
+    return false;
   }
 
   // Returns an observable of whether or not the user is authenticated
   public isAuthenticated$() {
-    return this.afAuth.authState.map(auth => {
-      if (auth) {
-        return auth.emailVerified;
+    return this.afAuth.authState.switchMap(user => {
+      if (user) {
+        return Observable.of(user.emailVerified);
       }
-      return false;
+      else {
+        return Observable.of(false);
+      }
     });
+  }
+
+  public isAccountSetup$(): Observable<boolean> {
+    const user = this.afAuth.auth.currentUser;
+    if(user) {
+      return this.db.getObject(`users/${user.uid}/account_setup`);
+    }
+    return Observable.of(null);
   }
 
   public login(email: string, password: string): Promise<any> {
