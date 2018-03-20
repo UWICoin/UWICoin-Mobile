@@ -14,12 +14,12 @@ export class DatabaseProvider {
     return ref.valueChanges();
   }
 
-  setObject(path: string, data: any): Promise<void> {
+  async setObject(path: string, data: any): Promise<void> {
     const ref = this.db.object(path);
     return ref.set(data);
   }
 
-  updateObject(path: string, data: any): Promise<void> {
+  async updateObject(path: string, data: any): Promise<void> {
     const ref = this.db.object(path);
     return ref.update(data);
   }
@@ -36,7 +36,7 @@ export class DatabaseProvider {
     return uploadTask;
   }
 
-  removeObject(path: string): Promise<void> {
+  async removeObject(path: string): Promise<void> {
     const ref = this.db.object(path);
     return ref.remove();
   }
