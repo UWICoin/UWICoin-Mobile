@@ -1,3 +1,4 @@
+import { IBalance } from './../models/balance/balance.models';
 import { User } from './../models/user/user.models';
 import { Component, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -8,7 +9,6 @@ import { Page } from '../models/page/page.models';
 import { RippleLibProvider } from '../providers/ripple-lib/ripple-lib';
 import { ToastProvider } from '../providers/toast/toast';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({
@@ -17,10 +17,10 @@ import { Subscription } from 'rxjs/Subscription';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
+  balance: Promise<IBalance>;
   rootPage: string = 'LoginPage';
   pages: Page[];
-  user: User;
-  subscriptions: Subscription;
+  user$: Observable<User>;
 
   constructor(public platform: Platform,
     public statusBar: StatusBar,
@@ -30,16 +30,16 @@ export class MyApp {
     public rippleLib: RippleLibProvider,
     public toastProvider: ToastProvider) {
 
-    this.authProvider.isAuthenticated$().subscribe(isAuthenticated => {
+    this.authProvider.isAuthenticated$().subscribe(async isAuthenticated => {
       if (isAuthenticated) {
-        this.rippleLib.connect();
-        this.authProvider.getUser$().take(1).subscribe(user => {
-          this.user = user;
-        });
+        await this.rippleLib.connect();
+        this.user$ = this.authProvider.getUser$();
+        this.balance = this.rippleLib.getBalance();
       }
       else {
         this.rippleLib.disconnect();
-        this.user = null;
+        this.user$ = null;
+        this.balance = null;
       }
     });
 
