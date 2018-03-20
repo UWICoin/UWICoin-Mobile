@@ -1,3 +1,5 @@
+import { IQRCodeOptions } from './../../models/qrcode-options/qrcode-options.models';
+import { RippleLibProvider } from './../../providers/ripple-lib/ripple-lib';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
@@ -9,25 +11,33 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
 })
 export class PaymentPage {
 
-  qrcode = {
-    value: 'r9cZA1mLK5R5Am25ArfXFmqgNwjZgnfk59',
-    scale: 10,
-    imgwidth: 400,
-    refresh: 10
-  };
+  qrcode: IQRCodeOptions
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
-    public authProvider: AuthenticationProvider) {
-      
+    private authProvider: AuthenticationProvider,
+    private rippleLib: RippleLibProvider) {
+    
+      this.setupQRCode();
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PaymentPage');
+
   }
 
   ionViewCanEnter() {
     return this.authProvider.isAuthenticated();
+  }
+
+  private setupQRCode() {
+    const address = this.rippleLib.getAddress();
+    console.log(address);
+    this.qrcode = {
+      value: address,
+      scale: 10,
+      imageWidth: 400,
+      refresh: 10
+    }
   }
 
 }
