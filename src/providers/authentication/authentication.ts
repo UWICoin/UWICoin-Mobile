@@ -10,6 +10,7 @@ import { DatabaseProvider } from '../database/database';
 export class AuthenticationProvider {
 
   uid: string;
+  private user: Observable<User>;
 
   constructor(private afAuth: AngularFireAuth,
     private db: DatabaseProvider) {
@@ -17,9 +18,11 @@ export class AuthenticationProvider {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.uid = user.uid;
+        this.user = this.db.getObject(`users/${user.uid}`);
       }
       else {
         this.uid = null;
+        this.user = Observable.of(null);
       }
     });
   }
@@ -29,14 +32,7 @@ export class AuthenticationProvider {
   }
 
   public getUser$(): Observable<User> {
-    return this.afAuth.authState.switchMap(user => {
-      if (user) {
-        return this.db.getObject(`users/${user.uid}`);
-      }
-      else {
-        return Observable.of(null);
-      }
-    });
+    return this.user;
   }
 
   // Returns whether or not the user is authenticated
@@ -62,7 +58,7 @@ export class AuthenticationProvider {
 
   public isAccountSetup$(): Observable<boolean> {
     const user = this.afAuth.auth.currentUser;
-    if(user) {
+    if (user) {
       return this.db.getObject(`users/${user.uid}/account_setup`);
     }
     return Observable.of(null);
