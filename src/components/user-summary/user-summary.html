@@ -1,10 +1,13 @@
-<div class="container">
+<div class="container" *ngIf="user$ | async; let user">
   <div class="img-container">
-    <img src="{{photoURL}}" class="user-image">
+    <img src="{{user.photoURL || 'assets/imgs/avatar.png'}}" class="user-image">
   </div>
   <div class="user-details">
-    <p>{{fullName}}</p>
-    <p>
-      <strong>Current Balance: </strong> {{balance}}</p>
+    <p>{{user.full_name}}</p>
+    <p *ngIf="balance | async; let bal">
+      <strong>Balance: </strong>
+      <span>{{bal.value}} </span>
+      <span>{{bal.currency}}</span>
+    </p>
   </div>
 </div>
