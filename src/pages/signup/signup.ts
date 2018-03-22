@@ -18,10 +18,10 @@ export class SignupPage {
 
   signupForm: FormGroup;
 
-  fullName: string = 'Darion Hernandez';
-  email: string = 'darion.hernandez@my.uwi.edu';
-  password: string = 'password1';
-  confirmPassword: string = 'password1';
+  fullName: string = '';
+  email: string = '';
+  password: string = '';
+  confirmPassword: string = '';
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
