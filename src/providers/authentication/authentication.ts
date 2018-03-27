@@ -5,15 +5,17 @@ import * as firebase from 'firebase';
 import { User } from '../../models/user/user.models';
 import { Roles } from './../../models/roles/roles.models';
 import { DatabaseProvider } from '../database/database';
+import { RippleLibProvider } from '../ripple-lib/ripple-lib';
 
 @Injectable()
 export class AuthenticationProvider {
 
-  uid: string;
+  private uid: string;
   private user: Observable<User>;
 
   constructor(private afAuth: AngularFireAuth,
-    private db: DatabaseProvider) {
+    private db: DatabaseProvider,
+    private rippleLib: RippleLibProvider) {
 
     this.afAuth.authState.subscribe(user => {
       if (user) {
@@ -27,8 +29,12 @@ export class AuthenticationProvider {
     });
   }
 
-  public forgotPassword(email: string): Promise<any> {
+  public async forgotPassword(email: string): Promise<any> {
     return this.afAuth.auth.sendPasswordResetEmail(email);
+  }
+
+  public getUID(): string {
+    return this.uid;
   }
 
   public getUser$(): Observable<User> {
@@ -36,7 +42,7 @@ export class AuthenticationProvider {
   }
 
   // Returns whether or not the user is authenticated
-  public isAuthenticated() {
+  public isAuthenticated(): boolean {
     const user = this.afAuth.auth.currentUser;
     if (user) {
       return user ? user.emailVerified : false;
@@ -45,38 +51,27 @@ export class AuthenticationProvider {
   }
 
   // Returns an observable of whether or not the user is authenticated
-  public isAuthenticated$() {
-    return this.afAuth.authState.switchMap(user => {
-      if (user) {
-        return Observable.of(user.emailVerified);
-      }
-      else {
-        return Observable.of(false);
-      }
-    });
+  public isAuthenticated$(): Observable<boolean> {
+    return this.afAuth.authState.map(user => user.emailVerified);
   }
 
   public isAccountSetup$(): Observable<boolean> {
-    const user = this.afAuth.auth.currentUser;
-    if (user) {
-      return this.db.getObject(`users/${user.uid}/account_setup`);
-    }
-    return Observable.of(null);
+    return this.user.map(user => user.account_setup);
   }
 
-  public login(email: string, password: string): Promise<any> {
+  public async login(email: string, password: string): Promise<any> {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  public logout(): Promise<any> {
+  public async logout(): Promise<any> {
     return this.afAuth.auth.signOut();
   }
 
-  public signup(email: string, password: string): Promise<any> {
+  public async signup(email: string, password: string): Promise<any> {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
 
-  public updateUserData(user: User) {
+  public async updateUserData(user: User): Promise<void> {
     if (user) {
       return this.db.updateObject(`users/${user.uid}`, user);
     }
