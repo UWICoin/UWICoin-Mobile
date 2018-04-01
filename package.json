@@ -47,6 +47,7 @@
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
     "lodash": "^4.17.5",
+    "node-rsa": "^0.4.2",
     "qrcode": "^1.2.0",
     "ripple-lib": "^0.19.0",
     "rxjs": "5.5.2",
