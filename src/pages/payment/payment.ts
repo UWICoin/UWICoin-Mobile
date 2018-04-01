@@ -35,8 +35,7 @@ export class PaymentPage {
     this.qrcode = {
       value: address,
       scale: 10,
-      imageWidth: 400,
-      refresh: 10
+      imageWidth: 400
     }
   }
 

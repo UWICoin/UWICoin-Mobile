@@ -5,11 +5,11 @@ qrcode {
         margin: 25px 25px 0 25px;
     }
 
-/* Adds a logo to the center of the qr code */
-    #qrcode::before{
+    // Adds a logo to the center of the qr code
+    #qrcode::before {
+        content: '';
         position: absolute;
         display: block;
-        content: '';
         width: 30%;
         height: 30%;
         top: 50%;
@@ -17,6 +17,27 @@ qrcode {
         margin: -15% 0 0 -15%;
         background: url('/assets/imgs/icon.png');
         background-size: contain;
-        // background-color: pink;
+    }
+
+    // Loading bar
+    #qrcode::after {
+        content: '';
+        position: absolute;
+        display: block;
+        position: absolute;
+        background: color($colors, primary);
+        width: 100%;
+        height: 7px;
+        bottom: -7px;
+        animation: load 15s infinite; // Set the animation to the length of the qrcode refresh
+    }
+
+    @keyframes load {
+        0% {
+            width: 0;
+        }
+        100% {
+            width: 100%;
+        }
     }
 }

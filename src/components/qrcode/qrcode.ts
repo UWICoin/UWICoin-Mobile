@@ -18,12 +18,13 @@ export class QRCodeComponent implements OnChanges {
   @Input('version') version = '';
   @Input('scale') scale = 4; // The scale factor.
   @Input('width') width = 100; // The width of the qr code, height is equal to width.
-  @Input('refresh') refresh = 0;
 
   @ViewChild('qrcodeElement') qrcodeElement: ElementRef;
-  minRefreshInterval = 10;
+
   emitter: Subscription;
   key: any;
+  minRefreshInterval = 10;
+  refresh = 15;
 
   constructor(private renderer: Renderer2) {
     this.key = new NodeRSA(`-----BEGIN RSA PRIVATE KEY-----
@@ -44,7 +45,7 @@ vRM9Ui3gY+9L9CHB6kAfq+4E5+HaKtzycL2gH1hS
   }
 
   ngOnChanges() {
-    if (this.refresh && this.refresh >= this.minRefreshInterval) {
+    if (this.refresh >= this.minRefreshInterval) {
       // Refresh every given seconds
       this.emitter = Observable.interval(this.refresh * 1000).subscribe(data => {
         this.createQRCode();
@@ -55,7 +56,9 @@ vRM9Ui3gY+9L9CHB6kAfq+4E5+HaKtzycL2gH1hS
 
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
+    if(this.emitter) {
     this.emitter.unsubscribe();
+  }
   }
 
   // Creates a QRCode based on the type selected
