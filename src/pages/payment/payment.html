@@ -1,17 +1,59 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Scan</ion-title>
+    <ion-title>New Transaction</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
-<ion-content padding>
-  <p>Please ask the merchant to scan the code</p>
-  <qrcode [value]="qrcode.value" [width]="qrcode.imageWidth" [margin]="0"></qrcode>
-  <p>Auto updates every 15 seconds</p>
+<ion-content>
+  <ion-slides>
+    <ion-slide class="swiper-no-swiping">
+      <div class="page payment_container">
+        <h4>A withdrawal was requested by CompanyName:</h4>
+        <div class="withdrawal_info">
+          <div class="modal_row">
+            <label>Amount:</label>
+            <span>5.00</span>
+          </div>
+          <div class="modal_row">
+            <label>Fee:</label>
+            <span>0.15</span>
+          </div>
+          <div class="modal_row">
+            <label>Subtotal:</label>
+            <span>5.15</span>
+          </div>
+        </div>
+        <div class="button_row">
+          <button ion-button color="secondary" (click)="accept()">Accept</button>
+          <button ion-button color="danger" (click)="cancel()">Cancel</button>
+        </div>
+        <div class="additional_info">
+          <p>*All purchase are final and refunds are not available after a purchase unless in the event of a mistransation.</p>
+        </div>
+      </div>
+    </ion-slide>
+    <ion-slide class="swiper-no-swiping">
+      <div class="page">
+        <img src="assets/imgs/icon.png" class="payment_logo" width="80" height="80">
+        <form [formGroup]="passwordForm">
+          <h4>Please enter your password to continue</h4>
+          <div class="input-item">
+            <ion-item>
+              <ion-icon name="lock" item-left></ion-icon>
+              <ion-icon id="password" *ngIf="passwordForm.controls['password'].valid" name="checkmark-circle" item-right small></ion-icon>
+              <ion-icon *ngIf="!passwordForm.controls['password'].valid && passwordForm.controls['password'].touched" name="close-circle"
+                item-right small></ion-icon>
+              <ion-input type="password" id="password" formControlName="password" ([ngModel])="password"></ion-input>
+            </ion-item>
+          </div>
+          <div class="button_row">
+            <button ion-button color="secondary" (click)="submitTransaction()" [disabled]="!paswordForm.valid">Accept</button>
+            <button ion-button color="danger" (click)="cancel()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </ion-slide>
+  </ion-slides>
 </ion-content>

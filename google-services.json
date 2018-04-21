@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "233823536584",
+    "firebase_url": "https://uwicoin.firebaseio.com",
+    "project_id": "uwicoin",
+    "storage_bucket": "uwicoin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:233823536584:android:c5016688743e2aaf",
+        "android_client_info": {
+          "package_name": "com.uwicoin.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "233823536584-mr868ma5gicm3nafh54joellebr6fgmq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhthy28Dkw0mtpxQJV9vbzzitTXP079fE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

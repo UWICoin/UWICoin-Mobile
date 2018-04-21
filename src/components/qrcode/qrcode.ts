@@ -1,15 +1,17 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, OnChanges } from '@angular/core';
+import { FIREBASE_CONFIG } from '../../firebase.config';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import * as cryptico from 'cryptico';
+import * as moment from 'moment';
 import * as QRCode from 'qrcode';
-import * as NodeRSA from 'node-rsa';
 import 'rxjs/add/observable/interval';
 
 @Component({
   selector: 'qrcode',
   templateUrl: 'qrcode.html'
 })
-export class QRCodeComponent implements OnChanges {
+export class QRCodeComponent implements OnChanges, OnInit {
 
   @Input('correction') correction: 'L' | 'M' | 'Q' | 'H' = 'M'; // Error correction level
   @Input('margin') margin = 4; // Defines the size of the quiet zone
@@ -21,44 +23,39 @@ export class QRCodeComponent implements OnChanges {
 
   @ViewChild('qrcodeElement') qrcodeElement: ElementRef;
 
-  emitter: Subscription;
-  key: any;
+  bits = 1024;
+  subscriptions: Subscription;
+  key = FIREBASE_CONFIG.apiKey;
   minRefreshInterval = 10;
   refresh = 15;
+  rsaKey: any;
+  rsaPublicKey: any;
+  loading = false;
 
   constructor(private renderer: Renderer2) {
-    this.key = new NodeRSA(`-----BEGIN RSA PRIVATE KEY-----
-MIICWgIBAAKBgEalK6C9NcITz9drtyn3ktaOhrfx/lBkh9VfBJaqj62KN/z6RLGs
-xG15cOat2K6WYXxQGEtWr4QZbWN0Kj8tjsmw/cHgbnzxOwaOOtWzK/ayerEk7H1j
-GI9SOGs+InArn7o6IAP52P7ZenNcXHxYJ7JDW9RN1LYfZ20KWySKp1a5AgMBAAEC
-gYAxGSJVOKtgEzzkTyyhsjsPe0cOGNXTMctl8//QZwIsbl+zJo0Pny91lm1tJW3v
-CPz/1PrNgZXCjZmFAXtLJXKS581C8huxHPvrb5yuEbCKxlVP01wiUmHZ8T8DalJf
-MJ6WkvNMVGNFGsvDrp4i3Fdh1rtK543oOQcMgbxSUTLe8QJBAIbaMG7LowyaXS8B
-h0gAbMMwe4d9P7Pv2kVeavJIRMHpUWnylcsDc6N6Bi0gVDcdjsQ539RmmFwcHdfl
-pPzEdycCQQCGHGdLSjW6Mtu2F8EKNsbvIcwr8l4iPgSkCUEPDSwX0uu9CPJPY9hV
-lWv6xlgL2WLLHVwIKZIRLNaCsRjfFW8fAkBG/0jQjFXjpMG6pctblR2uBjCDPOX1
-DiqUqwkTVgkdLoG2jglfQQn4352w1HyCKAWqOe4mHX3JwOPVbwpWKfmxAkB0Zl65
-GFX9oHrWV1OzO8v6bgk584kEi3OXtHiFSdeFbgox7nvxsCVqUuB/rnto/WskA/2H
-EB25ToN4t6FwrrfdAkB+Z18LIyBJ16RwVQIdkWbmO+1p1vDoi1002qzJmE5x6yX3
-vRM9Ui3gY+9L9CHB6kAfq+4E5+HaKtzycL2gH1hS
------END RSA PRIVATE KEY-----`);
+    this.rsaKey = cryptico.generateRSAKey(this.key, this.bits);
+    this.rsaPublicKey = cryptico.publicKeyString(this.rsaKey);
   }
 
-  ngOnChanges() {
+  ngOnInit() {
     if (this.refresh >= this.minRefreshInterval) {
       // Refresh every given seconds
-      this.emitter = Observable.interval(this.refresh * 1000).subscribe(data => {
+      this.subscriptions = Observable.interval(this.refresh * 1000).subscribe(data => {
         this.createQRCode();
       });
     }
     this.createQRCode();
   }
 
+  ngOnChanges() {
+    
+  }
+
   // tslint:disable-next-line:use-life-cycle-interface
   ngOnDestroy() {
-    if(this.emitter) {
-    this.emitter.unsubscribe();
-  }
+    if (this.subscriptions) {
+      this.subscriptions.unsubscribe();
+    }
   }
 
   // Creates a QRCode based on the type selected
@@ -73,14 +70,23 @@ vRM9Ui3gY+9L9CHB6kAfq+4E5+HaKtzycL2gH1hS
     }
   }
 
+  public decrypt(encrypted: string) {
+    const decrypted = cryptico.decrypt(encrypted, this.rsaKey);
+    return decrypted;
+  }
+
+  public encrypt(plaintxt: string) {
+    const encrypted = cryptico.encrypt(plaintxt, this.rsaPublicKey);
+    return encrypted.cipher;
+  }
+
   private generateData() {
     const data = JSON.stringify({
-      'timestamp': new Date().toISOString(),
-      'interval': this.refresh,
+      'timestamp': moment(new Date().toISOString()).format('YYYY-MM-DD HH:mm:ss'),
+      'interval': this.refresh, 
       'data': this.value
     });
-    const encrypted = this.key.encrypt(JSON.stringify(data), 'base64');
-    return encrypted;
+    return this.encrypt(data);
   }
 
   private toDataURL() {
@@ -94,7 +100,7 @@ vRM9Ui3gY+9L9CHB6kAfq+4E5+HaKtzycL2gH1hS
           'width': this.width
         }, (error, url) => {
           if (error) {
-            console.error(error);
+            console.log('QRCode: ', error);
             reject(error);
           }
           // tslint:disable-next-line:one-line
@@ -106,12 +112,14 @@ vRM9Ui3gY+9L9CHB6kAfq+4E5+HaKtzycL2gH1hS
   }
 
   private generateImage() {
+    this.loading = true;
     let element: Element;
     element = this.renderer.createElement('img');
     this.toDataURL().then((data: string) => {
       // console.log(data);
       element.setAttribute('src', data);
       this.renderElement(element);
+      this.loading = false;
     });
   }
 

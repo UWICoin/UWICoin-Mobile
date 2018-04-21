@@ -1,0 +1,16 @@
+<ion-content padding>
+  <spinner></spinner>
+  <ion-grid>
+    <ion-row *ngIf="loading">
+      <ion-col style="text-align: center;">Please wait while we're setting up your account for the first time.</ion-col>
+    </ion-row>
+    <ion-row *ngIf="!loading">
+      <ion-col style="text-align: center;">All set!</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-4 offset-4>
+        <button [disabled]="loading" ion-button color="primary" (click)="continue()">Continue</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

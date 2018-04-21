@@ -8,5 +8,11 @@
 
 
 <ion-content padding>
-  
+  <ion-list>
+    <ion-item *ngIf="user$ | async; let user">
+      <img src="{{ user.photoURL || 'assets/imgs/avatar.png'}}" class="profile-photo"/>
+      <button (click)="presentActionSheet()" ion-button>Edit</button>
+    </ion-item>
+    <button (click)="changePassword()" ion-item>Change Password</button>
+  </ion-list>
 </ion-content>

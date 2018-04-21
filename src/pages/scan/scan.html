@@ -1,0 +1,22 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Scan</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div class="page">
+      <ion-spinner name="dots" *ngIf="!qrcode"></ion-spinner>
+      <div *ngIf="qrcode">
+        <p style="text-align: center">Please ask the merchant to scan the code</p>
+        <qrcode *ngIf="qrcode" [value]="qrcode.value" [width]="qrcode.imageWidth" [margin]="0"></qrcode>
+        <p style="text-align: center">Auto updates every 15 seconds</p>
+      </div>
+  </div>
+</ion-content>

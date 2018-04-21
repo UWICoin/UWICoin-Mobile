@@ -9,12 +9,13 @@ export class ToastProvider {
 
   }
 
-  showToast(msg: string): void {
+  showToast(msg: string, css?: string): void {
     let toast = this.toastCtrl.create({
       message: msg,
-      duration: 3000,
+      duration: 2000,
       position: 'bottom',
-      dismissOnPageChange: true
+      dismissOnPageChange: true,
+      cssClass: css == null ? 'defaultToast' : css
     });
     toast.present();
   }

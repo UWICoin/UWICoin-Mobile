@@ -11,5 +11,31 @@
 
 
 <ion-content padding>
-
+  <pull-to-refresh></pull-to-refresh>
+  <div class="page">
+    <ion-refresher (ionRefresh)="getData($event)">
+      <ion-refresher-content>Loading content...</ion-refresher-content>
+    </ion-refresher>
+    <table *ngIf="transactions | async; else notransactions; let trans">
+      <thead>
+        <tr>
+          <th>Src</th>
+          <th>Dest</th>
+          <th>Type</th>
+          <th>Amt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaction of trans">
+          <td>{{ transaction.specification.source.address }}</td>
+          <td>{{ transaction.specification.destination.address }}</td>
+          <td>{{ transaction.specification.source.address === account.address ? 'Debit' : 'Credit'}}</td>
+          <td>{{ transaction.outcome.deliveredAmount.value }} {{ transaction.outcome.deliveredAmount.currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #notransactions>
+      <ion-spinner name="dots"></ion-spinner>
+    </ng-template>
+  </div>
 </ion-content>

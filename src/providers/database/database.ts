@@ -14,6 +14,11 @@ export class DatabaseProvider {
     return ref.valueChanges();
   }
 
+  getList(path: string): Observable<any[]> {
+    const ref = this.db.list(path);
+    return ref.valueChanges();
+  }
+
   async setObject(path: string, data: any): Promise<void> {
     const ref = this.db.object(path);
     return ref.set(data);

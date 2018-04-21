@@ -1,7 +1,7 @@
 import { Roles } from "../roles/roles.models";
 import { IAccount } from "../account/account.models";
 
-export interface User {
+export interface IUser {
     account_setup?: boolean;
     account?: IAccount;
     full_name?: string;

@@ -19,8 +19,4 @@ export class NotificationsPage {
     console.log('ionViewDidLoad NotificationsPage');
   }
 
-  ionViewCanEnter() {
-    return this.authProvider.isAuthenticated();
-  }
-
 }

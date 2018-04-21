@@ -1,3 +1,14 @@
 page-outlets {
 
+    .column {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1em;
+
+        label {
+            font-weight: 600;
+            font-size: 1em;
+            color: color($colors, primary);
+        }
+    }
 }

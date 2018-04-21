@@ -3,7 +3,7 @@
     <ion-toolbar color="primary">
       <ion-title>UWICoin</ion-title>
     </ion-toolbar>
-    <user-summary [user]="user$" [balance]="balance"></user-summary>
+    <user-summary *ngIf="uid"></user-summary>
   </ion-header>
 
   <ion-content>

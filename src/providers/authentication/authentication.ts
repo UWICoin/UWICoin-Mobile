@@ -1,62 +1,54 @@
+import { NavController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase';
-import { User } from '../../models/user/user.models';
+import { IUser } from '../../models/user/user.models';
 import { Roles } from './../../models/roles/roles.models';
 import { DatabaseProvider } from '../database/database';
 import { RippleLibProvider } from '../ripple-lib/ripple-lib';
+import { Subscription } from 'rxjs/Subscription';
+import { IAccount } from '../../models/account/account.models';
 
 @Injectable()
 export class AuthenticationProvider {
 
-  private uid: string;
-  private user: Observable<User>;
+  private subscriptions: Subscription;
 
-  constructor(private afAuth: AngularFireAuth,
-    private db: DatabaseProvider,
-    private rippleLib: RippleLibProvider) {
+  private userPath = 'users/students/';
 
-    this.afAuth.authState.subscribe(user => {
-      if (user) {
-        this.uid = user.uid;
-        this.user = this.db.getObject(`users/${user.uid}`);
-      }
-      else {
-        this.uid = null;
-        this.user = Observable.of(null);
-      }
-    });
+  constructor(public afAuth: AngularFireAuth,
+    private db: DatabaseProvider) {
   }
 
   public async forgotPassword(email: string): Promise<any> {
     return this.afAuth.auth.sendPasswordResetEmail(email);
   }
 
-  public getUID(): string {
-    return this.uid;
+  public getAuthState() {
+    return this.afAuth.authState;
   }
 
-  public getUser$(): Observable<User> {
-    return this.user;
+  public getUser$(): Observable<IUser> {
+    return this.afAuth.authState.switchMap(user => {
+      if(user) {
+        return this.db.getObject(`${this.userPath}/${user.uid}`);
+      }
+      return [];
+    });
   }
 
-  // Returns whether or not the user is authenticated
-  public isAuthenticated(): boolean {
-    const user = this.afAuth.auth.currentUser;
-    if (user) {
-      return user ? user.emailVerified : false;
-    }
-    return false;
+  public getAccount$(): Observable<IAccount> {
+    return this.afAuth.authState.switchMap(user => {
+      if(user) {
+        return this.db.getObject(`${this.userPath}/${user.uid}/account`);
+      }
+      return [];
+    });
   }
 
-  // Returns an observable of whether or not the user is authenticated
-  public isAuthenticated$(): Observable<boolean> {
-    return this.afAuth.authState.map(user => user.emailVerified);
-  }
-
-  public isAccountSetup$(): Observable<boolean> {
-    return this.user.map(user => user.account_setup);
+  public isAccountSetup$(uid): Observable<boolean> {
+    return this.db.getObject(`${this.userPath}/${uid}/account_setup`);
   }
 
   public async login(email: string, password: string): Promise<any> {
@@ -64,17 +56,22 @@ export class AuthenticationProvider {
   }
 
   public async logout(): Promise<any> {
-    return this.afAuth.auth.signOut();
+    return this.afAuth.auth.signOut().then(() => console.log('Logged out'));
   }
 
   public async signup(email: string, password: string): Promise<any> {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
   }
 
-  public async updateUserData(user: User): Promise<void> {
+  public async updateUserData(user: IUser): Promise<void> {
     if (user) {
-      return this.db.updateObject(`users/${user.uid}`, user);
+      return this.db.updateObject(`users/students/${user.uid}`, user);
     }
+  }
+
+  public async reauthenticate(password: string) {
+    const user = firebase.auth().currentUser;
+    return user.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(user.email, password));
   }
 
 }

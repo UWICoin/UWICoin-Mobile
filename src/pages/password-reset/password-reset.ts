@@ -25,10 +25,6 @@ export class PasswordResetPage {
     });
   }
 
-  ionViewCanEnter() {
-    return !this.authProvider.isAuthenticated();
-  }
-
   ionViewDidLoad() {
     console.log('ionViewDidLoad PasswordResetPage');
   }

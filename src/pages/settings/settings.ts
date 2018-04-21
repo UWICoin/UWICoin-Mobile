@@ -19,16 +19,12 @@ export class SettingsPage {
     this.pages = [
       { title: 'Account', component: 'AccountPage', icon: 'key' },
       { title: 'Notifications', 'component': 'NotificationsPage', icon: 'notifications' },
-      { title: 'Help', 'component': 'HelpPage', icon: 'help-circle'}
+      { title: 'Help', 'component': 'HelpPage', icon: 'help-circle' }
     ]
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SettingsPage');
-  }
-
-  ionViewCanEnter(){
-    return this.authProvider.isAuthenticated();
   }
 
   openPage(page: Page) {

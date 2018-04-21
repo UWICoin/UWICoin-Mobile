@@ -10,15 +10,12 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
 export class HelpPage {
 
   constructor(public navCtrl: NavController,
-    public navParams: NavParams) {
+    public navParams: NavParams,
+    public authProvider: AuthenticationProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad HelpPage');
-  }
-
-  ionViewCanEnter(){
-    return this.authProvider.isAuthenticated();
   }
 
 }

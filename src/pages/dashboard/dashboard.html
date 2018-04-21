@@ -10,6 +10,31 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+  <div class="page">
+    <div class="card center balance">
+      <h4>Current Balance</h4>
+      <div class="balance" *ngIf="balance | async; else nobalance; let bal">
+        <span class="amount">{{ bal.value }}</span>
+        <span class="currency">{{ bal.currency }}</span>
+      </div>
+      <ng-template #nobalance>
+        <ion-spinner name="dots">Loading...</ion-spinner>
+      </ng-template>
+    </div>
+    <div class="card center balance">
+      <h4>Current Fee</h4>
+      <div *ngIf="ledgerInfo | async; else noledger; let ledger">
+        <span class="amount">{{ ledger.baseFee }}</span>
+      </div>
+      <ng-template #noledger>
+        <ion-spinner name="dots">Loading...</ion-spinner>
+      </ng-template>
+    </div>
+    <div class="card center">
+      <h1 class="heading">Scan QR Code</h1>
+      <p class="content_description">Make a purchase or top up your account by allowing a vendor to scan your QR Code.</p>
+      <button ion-button (click)="scan()">Scan QR Code</button>
+    </div>
+  </div>
 </ion-content>
