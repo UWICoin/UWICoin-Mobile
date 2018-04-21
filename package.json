@@ -1,7 +1,6 @@
 {
   "name": "uwicoin",
-  "author": "Darion Hernandez",
-  "homepage": "https://ionicframework.com/",
+  "author": "Darion Hernandez (UWICoin)",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -85,7 +84,7 @@
     "typescript": "2.4.2"
   },
   "version": "0.0.1",
-  "description": "An Ionic application to interface with the UWICoin cryptocurrency",
+  "description": "A cross platform Ionic application for the UWICoin platform.",
   "cordova": {
     "plugins": {
       "com.synconset.imagepicker": {},
