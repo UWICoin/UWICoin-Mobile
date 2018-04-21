@@ -3,7 +3,8 @@
 ![cordova cli](https://img.shields.io/badge/cordova%20cli-v7.1.0-green.svg)
 ![ionic cli](https://img.shields.io/badge/ionic%20cli-v3.19.1-blue.svg)
 ![npm](https://img.shields.io/badge/npm-v5.6.0-blue.svg)
-[![Build Status](https://travis-ci.com/DarionHernandez/UWICoin-mobile.svg?token=qHAbDTKpMseKMzLwNCDR&branch=develop)](https://travis-ci.com/DarionHernandez/UWICoin-mobile)
+[![Master Build Status](https://travis-ci.org/UWICoin/UWICoin-Mobile.svg?branch=master)](https://travis-ci.org/UWICoin/UWICoin-Mobile/)
+[![Develop Build Status](https://travis-ci.com/DarionHernandez/UWICoin-mobile.svg?token=qHAbDTKpMseKMzLwNCDR&branch=develop)](https://travis-ci.org/UWICoin/UWICoin-Mobile/)
 
 <img src="https://github.com/DarionHernandez/UWICoin-mobile/blob/develop/src/assets/imgs/icon.png" alt="UWICoin Logo" width="200">
 
