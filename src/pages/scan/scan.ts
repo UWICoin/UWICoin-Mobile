@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, Loading } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
 
 @IonicPage()
 @Component({
@@ -13,7 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ScanPage {
 
-	loading = false;
+	loading = new Subject<boolean>();
 	qrcode: IQRCodeOptions
 	subscriptions: Subscription;
 
@@ -38,20 +39,16 @@ export class ScanPage {
 
 	private setupQRCode() {
 
-		this.loading = true;
 		this.subscriptions = this.authProvider.getAccount$().take(1).subscribe(account => {
 			this.qrcode = {
 				value: account.address,
 				scale: 10,
 				imageWidth: 400
 			}
-			this.loading = false;
 		}, error => {
 			this.toastProvider.showToast('Error fetching address');
 			console.log('Error fetching address(scan): ', error);
-			this.loading = false;
 		});
-
 	}
 
 }
