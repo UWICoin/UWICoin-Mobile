@@ -1,28 +1,30 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>New Transaction</ion-title>
+    <ion-title>New Debit Transaction</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content>
-  <ion-slides>
-    <ion-slide class="swiper-no-swiping">
-      <div class="page payment_container">
-        <h4>A withdrawal was requested by CompanyName:</h4>
+  <ion-slides pager=true paginationType="progress" zoom=false>
+    <ion-slide>
+      <ion-spinner nae="dots" *ngIf="!vendorName"></ion-spinner>
+      <div class="page payment_container" *ngIf="vendorName">
+        <h4>A withdrawal was requested by
+          <br> {{ vendorName }}</h4>
         <div class="withdrawal_info">
           <div class="modal_row">
             <label>Amount:</label>
-            <span>5.00</span>
+            <span>{{ amount }} {{ currency }}</span>
           </div>
           <div class="modal_row">
             <label>Fee:</label>
-            <span>0.15</span>
+            <span>{{ fee }} {{ currency }}</span>
           </div>
           <div class="modal_row">
             <label>Subtotal:</label>
-            <span>5.15</span>
+            <span>{{ subtotal }} {{ currency }}</span>
           </div>
         </div>
         <div class="button_row">
@@ -33,11 +35,14 @@
           <p>*All purchase are final and refunds are not available after a purchase unless in the event of a mistransation.</p>
         </div>
       </div>
+      <ng-template #loading>
+        <ion-spinner name="dots">Loading data...</ion-spinner>
+      </ng-template>
     </ion-slide>
-    <ion-slide class="swiper-no-swiping">
+    <ion-slide>
       <div class="page">
         <img src="assets/imgs/icon.png" class="payment_logo" width="80" height="80">
-        <form [formGroup]="passwordForm">
+        <form [formGroup]="passwordForm" (ngSubmit)="submitTransaction()">
           <h4>Please enter your password to continue</h4>
           <div class="input-item">
             <ion-item>
@@ -45,11 +50,11 @@
               <ion-icon id="password" *ngIf="passwordForm.controls['password'].valid" name="checkmark-circle" item-right small></ion-icon>
               <ion-icon *ngIf="!passwordForm.controls['password'].valid && passwordForm.controls['password'].touched" name="close-circle"
                 item-right small></ion-icon>
-              <ion-input type="password" id="password" formControlName="password" ([ngModel])="password"></ion-input>
+              <ion-input id="reauth-password" type="password" [(ngModel)]="password" formControlName="password" placeholder="Password"></ion-input>
             </ion-item>
           </div>
           <div class="button_row">
-            <button ion-button color="secondary" (click)="submitTransaction()" [disabled]="!paswordForm.valid">Accept</button>
+            <button ion-button color="secondary" (click)="submitTransaction()" [disabled]="!passwordForm.valid">Accept</button>
             <button ion-button color="danger" (click)="cancel()">Cancel</button>
           </div>
         </form>
