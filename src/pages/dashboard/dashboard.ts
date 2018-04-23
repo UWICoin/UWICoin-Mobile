@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class DashboardPage {
 
 	balance: Promise<IBalance>;
+	fee: string;
 	transactions: any;
 	ledgerInfo: Observable<ILedger>;
 	subscriptions: Subscription;
@@ -25,25 +26,30 @@ export class DashboardPage {
 		public authProvider: AuthenticationProvider,
 		private rippleLib: RippleLibProvider) {
 
-		this.subscriptions = this.authProvider.getAccount$().take(1).subscribe((account: IAccount) => {
-			if(account) {
-				this.balance = this.rippleLib.getBalance(account.address);
-				this.transactions = this.rippleLib.getTransactions(account.address, 5);
-				this.ledgerInfo = this.rippleLib.getLedger();
-			}
-		});
-
-		this.ledgerInfo
+		this.getData();
 	}
 
 	ionViewDidLoad() {
 		console.log('ionViewDidLoad DashboardPage');
 	}
 
-	ionViewDidLeave(){
-		if(this.subscriptions) {
+	ionViewDidLeave() {
+		if (this.subscriptions) {
 			this.subscriptions.unsubscribe();
 		}
+	}
+
+	getData(refresher?) {
+		this.authProvider.getAccount$().take(1).subscribe((account: IAccount) => {
+			if (account) {
+				this.balance = this.rippleLib.getBalance(account.address);
+				this.transactions = this.rippleLib.getTransactions(account.address, 5);
+				this.fee = this.rippleLib.getFee();
+			}
+			if (refresher) {
+				refresher.complete();
+			}
+		});
 	}
 
 	scan(): void {

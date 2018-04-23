@@ -1,7 +1,8 @@
 page-dashboard {
     .balance {
 
-        background-color: #eee;
+        background: #eee;
+        background-color: linear-gradient(#eee, #fff);
 
         h4 {
             text-transform: capitalize;

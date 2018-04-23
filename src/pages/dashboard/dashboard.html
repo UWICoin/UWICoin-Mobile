@@ -11,7 +11,11 @@
 
 
 <ion-content>
+  <pull-to-refresh></pull-to-refresh>
   <div class="page">
+    <ion-refresher (ionRefresh)="getData($event)">
+      <ion-refresher-content>Loading content...</ion-refresher-content>
+    </ion-refresher>
     <div class="card center balance">
       <h4>Current Balance</h4>
       <div class="balance" *ngIf="balance | async; else nobalance; let bal">
@@ -24,8 +28,8 @@
     </div>
     <div class="card center balance">
       <h4>Current Fee</h4>
-      <div *ngIf="ledgerInfo | async; else noledger; let ledger">
-        <span class="amount">{{ ledger.baseFee }}</span>
+      <div *ngIf="fee">
+        <span class="amount">{{ fee }}</span>
       </div>
       <ng-template #noledger>
         <ion-spinner name="dots">Loading...</ion-spinner>

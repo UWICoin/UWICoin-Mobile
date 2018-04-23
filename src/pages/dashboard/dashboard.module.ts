@@ -1,3 +1,4 @@
+import { PullToRefreshModule } from './../../components/pull-to-refresh/pull-to-refresh.module';
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { DashboardPage } from './dashboard';
@@ -7,7 +8,8 @@ import { DashboardPage } from './dashboard';
     DashboardPage,
   ],
   imports: [
-    IonicPageModule.forChild(DashboardPage)
+    IonicPageModule.forChild(DashboardPage),
+    PullToRefreshModule
   ],
 })
-export class DashboardPageModule {}
+export class DashboardPageModule { }
