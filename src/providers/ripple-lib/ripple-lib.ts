@@ -21,6 +21,7 @@ export class RippleLibProvider {
 	private minLedgerVersion: number;
 	private subscriptions: Subscription;
 	private currency = 'XRP';
+	private fee = '0.000012';
 
 	constructor(private afAuth: AngularFireAuth,
 		private dbProvider: DatabaseProvider) {
@@ -36,6 +37,10 @@ export class RippleLibProvider {
 				this.disconnect();
 			}
 		});
+	}
+
+	public getFee(): string {
+		return this.fee;
 	}
 
 	public getLedger(): Observable<ILedger> {
@@ -86,6 +91,10 @@ export class RippleLibProvider {
 				});
 			}).catch(error => {
 				console.log('Error getting ledger: ', error);
+				return {
+					currency: this.currency,
+					value: "0.00"
+				};
 			});
 		});
 	}
@@ -108,7 +117,7 @@ export class RippleLibProvider {
 	}
 
 	// Gets all the transactions for the user's account
-	public async getTransactions(address: string, limit?: number): Promise<ITransaction> {
+	public async getTransactions(address: string, limit?: number): Promise<ITransaction[]> {
 		return this.connect().then(() => {
 			return this.getLedger().take(1).toPromise().then(ledger => {
 				let options = {
@@ -119,6 +128,7 @@ export class RippleLibProvider {
 				return this.api.getTransactions(address, options);
 			}).catch(error => {
 				console.log('Error getting ledger: ', error);
+				return null;
 			});
 		});
 
@@ -129,32 +139,15 @@ export class RippleLibProvider {
 		return this.api.isConnected();
 	}
 
-
-	public async preparePayment(account: IAccount, vendorAddress: string, amount: string): Promise<any> {
+	public async preparePayment(account: IAccount, vendorAddress: string, payment: IPayment): Promise<any> {
 		return this.connect().then(() => {
+
 			const instructions = {
 				maxLedgerVersionOffset: 5
 			};
 
-			const payment: IPayment = {
-				source: {
-					address: account.address,
-					maxAmount: {
-						value: amount,
-						currency: this.currency
-					}
-				},
-				destination: {
-					address: vendorAddress,
-					amount: {
-						value: amount,
-						currency: this.currency
-					}
-				}
-			};
-
 			return this.api.preparePayment(account.address, payment, instructions).then(prepared => {
-				console.log('Payment transaction prepared');
+				console.log('Payment transaction prepared: ', JSON.stringify(prepared));
 				const { signedTransaction } = this.api.sign(prepared.txJSON, account.secret);
 				console.log('Payment transaction signed');
 				return this.api.submit(signedTransaction).then(message => {
@@ -165,3 +158,4 @@ export class RippleLibProvider {
 		});
 	}
 }
+
