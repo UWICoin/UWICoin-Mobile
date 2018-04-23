@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Renderer2, OnChanges, Output, EventEmitter } from '@angular/core';
 import { FIREBASE_CONFIG } from '../../firebase.config';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -26,11 +26,11 @@ export class QRCodeComponent implements OnChanges, OnInit {
   bits = 1024;
   subscriptions: Subscription;
   key = FIREBASE_CONFIG.apiKey;
+  loading = false;
   minRefreshInterval = 10;
   refresh = 15;
   rsaKey: any;
   rsaPublicKey: any;
-  loading = false;
 
   constructor(private renderer: Renderer2) {
     this.rsaKey = cryptico.generateRSAKey(this.key, this.bits);
@@ -48,7 +48,7 @@ export class QRCodeComponent implements OnChanges, OnInit {
   }
 
   ngOnChanges() {
-    
+
   }
 
   // tslint:disable-next-line:use-life-cycle-interface
@@ -83,7 +83,7 @@ export class QRCodeComponent implements OnChanges, OnInit {
   private generateData() {
     const data = JSON.stringify({
       'timestamp': moment(new Date().toISOString()).format('YYYY-MM-DD HH:mm:ss'),
-      'interval': this.refresh, 
+      'interval': this.refresh,
       'data': this.value
     });
     return this.encrypt(data);
@@ -119,6 +119,7 @@ export class QRCodeComponent implements OnChanges, OnInit {
       // console.log(data);
       element.setAttribute('src', data);
       this.renderElement(element);
+      element = this.renderer.createElement('img');
       this.loading = false;
     });
   }
