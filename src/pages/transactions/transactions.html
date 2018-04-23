@@ -10,32 +10,32 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
   <pull-to-refresh></pull-to-refresh>
   <div class="page">
     <ion-refresher (ionRefresh)="getData($event)">
       <ion-refresher-content>Loading content...</ion-refresher-content>
     </ion-refresher>
+    <h2 class="sub-heading center">Most recent transactions</h2>
     <table *ngIf="transactions | async; else notransactions; let trans">
       <thead>
         <tr>
-          <th>Src</th>
-          <th>Dest</th>
+          <th>Date</th>
           <th>Type</th>
-          <th>Amt</th>
+          <th>Amount</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let transaction of trans">
-          <td>{{ transaction.specification.source.address }}</td>
-          <td>{{ transaction.specification.destination.address }}</td>
+         <td>{{ transaction.outcome.timestamp | date }}</td>
           <td>{{ transaction.specification.source.address === account.address ? 'Debit' : 'Credit'}}</td>
-          <td>{{ transaction.outcome.deliveredAmount.value }} {{ transaction.outcome.deliveredAmount.currency }}</td>
+          <td>{{ transaction.specification.source.maxAmount.value }} {{ transaction.specification.source.maxAmount.currency }}</td>
         </tr>
       </tbody>
     </table>
     <ng-template #notransactions>
       <ion-spinner name="dots"></ion-spinner>
+      <div class="center" style="padding: 1em;">There are no transactions available at this time.</div>
     </ng-template>
   </div>
 </ion-content>
