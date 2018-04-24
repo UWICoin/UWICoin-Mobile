@@ -34,6 +34,14 @@ ion-icon{
     &[name="arrow-back"], &[name="md-arrow-back"], &[name="arrow-round-back"], &[name="md-arrow-round-back"], &[name="menu"], {
         color: color($colors, light);
     }
+
+    &[name="checkmark-circle"] {
+        color: color($colors, secondary);
+    }
+
+    &[name="close-circle"] {
+        color: color($colors, danger);
+    }
 }
 
 ion-spinner {
@@ -77,8 +85,13 @@ ion-spinner {
     color: color($colors, primary)
 }
 
+.sub-heading {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
 .page {
-    padding: 1.5em;
+    padding: 1.2em;
 }
 
 .defaultToast {
@@ -94,6 +107,7 @@ ion-spinner {
         background: color($colors, secondary) !important;
     }
 }
+
 
 .errorToast {
     > div {
@@ -113,8 +127,10 @@ table {
         width: 100%; 
 
         th {
-            color: color($colors, primary);
+            background-color: color($colors, primary);
+            color: color($colors, light);
             font-weight: 600;
+            font-size: 0.7em;
             text-transform: uppercase;
             border-bottom: 1px solid color($colors, primary);
         }
@@ -122,7 +138,7 @@ table {
         td, th {
             flex-basis: 1;
             box-sizing: border-box;
-            padding: 0.5em;
+            padding: 1em 0.5em;
             border-right: 1px solid color($colors, primary);
 
             &:last-child {
@@ -133,12 +149,25 @@ table {
         td {
             font-size: 0.9em;
         }
+    }
+}
 
-        tr {
-            &:nth-child(2) {
-                background: lighten(color($colors, primary), 0.8);
-                color: color($colors, light);
-            }
-        }
+tbody {
+    tr:nth-child(even) {
+        background: rgba(color($colors, primary), 0.3);
+    }
+}
+
+.img-container {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
+
+    .user-image {
+        width: 80px;
+        -webkit-filter: grayscale(50%);
+        filter: grayscale(50%);
     }
 }
