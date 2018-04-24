@@ -41,7 +41,9 @@ import { CacheModule } from 'ionic-cache';
     }),
     CacheModule.forRoot(),
     IonicModule.forRoot(MyApp, {
-      backButtonIcon: 'arrow-back'
+      backButtonIcon: 'arrow-back',
+      scrollAssist: false,
+      autoFocusAssist: false
     }),
     ReactiveFormsModule
   ],
