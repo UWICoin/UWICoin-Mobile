@@ -1,7 +1,19 @@
+$image-width: 150px;
+
 page-account {
-    .profile-photo {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
+    .img-container {
+        width: $image-width;
+        height: $image-width;
+        
+        .user-image {
+            width: $image-width;
+        }
+    }
+
+    .button {
+        margin-top: 2em;
+        padding: 1.5em;
+        width: 50%;
+        font-size: 1.2em;
     }
 }

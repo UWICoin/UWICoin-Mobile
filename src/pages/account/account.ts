@@ -49,20 +49,20 @@ export class AccountPage {
       mediaType: this.camera.MediaType.PICTURE
     }
 
-    // this.camera.getPicture(options).then(imageData => {
-    //   let img = `data:image/jpeg;base64,${imageData}`;
-    //   // this.authProvider.user$.take(1).subscribe(uid => {
-    //   //   this.dbProvider.setObject(`users/students/${uid}/photoURL`, img).then(snapshot => {
-    //   //     this.toastProvider.showToast('Image uploaded successfully');
-    //   //   }, error => {
-    //   //     console.error(error);
-    //   //     this.toastProvider.showToast('Image upload failed');
-    //   //   });
-    //   });
-    // }, error => {
-    //   console.error(error);
-    //   this.toastProvider.showToast(error);
-    // });
+    this.camera.getPicture(options).then(imageData => {
+      let img = `data:image/jpeg;base64,${imageData}`;
+      this.user$.take(1).subscribe(user => {
+        this.dbProvider.setObject(`users/students/${user.uid}/photoURL`, img).then(snapshot => {
+          this.toastProvider.showToast('Image uploaded successfully');
+        }, error => {
+          console.error(error);
+          this.toastProvider.showToast('Image upload failed');
+        });
+      });
+    }, error => {
+      console.error(error);
+      this.toastProvider.showToast(error);
+    });
   }
 
 
