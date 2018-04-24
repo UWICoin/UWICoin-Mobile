@@ -11,20 +11,22 @@
 
 
 <ion-content padding>
-  <div class="cards">
-    <div class="card" *ngFor="let outlet of outlets" (click)="getDetails(outlet)">
-      <!-- Vendor name-->
-      <div class="column">
-        <label>Vendor: </label>
-        <span>{{ outlet.vendorName }}</span>
+  <pull-to-refresh></pull-to-refresh>
+  <div>
+    <ion-refresher (ionRefresh)="getData($event)">
+      <ion-refresher-content>Loading content...</ion-refresher-content>
+    </ion-refresher>
+    <div class="cards">
+      <div class="card" *ngFor="let outlet of outlets | async" (click)="getDetails(outlet)">
+        <!-- Vendor name-->
+        <div class="row">
+          <div class="column">
+              <span class="outlet_name">{{ outlet.vendorName }}</span>
+              <span class="outlet_type">{{ outlet.vendorType }}</span>
+          </div>
+          <ion-icon name="arrow-forward"></ion-icon>
+        </div>
       </div>
-
-      <!-- Vendor description-->
-      <div class="column">
-        <label>Description </label>
-        <span>{{ outlet.description }}</span>
-      </div>
-
     </div>
   </div>
 </ion-content>
