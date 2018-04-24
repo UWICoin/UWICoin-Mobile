@@ -1,9 +1,9 @@
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { Component } from '@angular/core';
-import { DatabaseProvider } from './../../providers/database/database';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { RippleLibProvider } from '../../providers/ripple-lib/ripple-lib';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 @IonicPage()
 @Component({
@@ -18,7 +18,7 @@ export class SetupAccountPage {
     public navParams: NavParams,
     private authProvider: AuthenticationProvider,
     private rippleLib: RippleLibProvider,
-    private dbProvider: DatabaseProvider) {
+    private db: AngularFireDatabase) {
 
     this.updateAddress();
   }
@@ -29,17 +29,28 @@ export class SetupAccountPage {
 
   updateAddress() {
     this.authProvider.getUser$().take(1).subscribe(user => {
-      const account = this.rippleLib.generateAddress();
+    
       if (user) {
-        const data = {
-          'account_setup': true,
-          'account': account,
+
+        const account = this.rippleLib.generateAddress();
+
+        const accountInfo = {
+          name: user.full_name,
+          address: account.address
         }
-        this.dbProvider.updateObject(`users/students/${user.uid}`, data).then(() => {
+
+        const updates = {};
+        updates[`users/students/${user.uid}/account_setup`] = true;
+        updates[`users/students/${user.uid}/account`] = account;
+        updates[`accounts/${user.uid}/`] = accountInfo;
+
+        const ref = this.db.object('/');
+        ref.update(updates).then(() => {
           this.loading = false;
         }, error => {
           console.log('Updating student error: ', error);
         });
+
       }
     }, error => {
       console.log('Setup account: ', error);
