@@ -15,8 +15,8 @@ export class LoginPage {
 
 	loginForm: FormGroup;
 
-	email: string = 'darion.hernandez@my.uwi.edu';
-	password: string = 'password1';
+	email: string = '';
+	password: string = '';
 
 	constructor(public navCtrl: NavController,
 		public navParams: NavParams,
