@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # UWICoin
 
 ![cordova cli](https://img.shields.io/badge/cordova%20cli-v7.1.0-green.svg)
@@ -83,5 +83,3 @@ To run on an iOS device
 ionic cordova run ios
 ```
 =======
-# UWICoin-Mobile
->>>>>>> b34c14e5bd3898c2ebdb3a72b89bf9f6e5c5e7e0
