@@ -13,6 +13,7 @@ import { ToastProvider } from '../providers/toast/toast';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { CacheService } from "ionic-cache";
+import { IPayment } from '../models/payment/payment.models';
 
 @Component({
 	templateUrl: 'app.html'
@@ -66,15 +67,6 @@ export class MyApp {
 			this.setupCloudMessaging();
 			this.setupCacheSettings();
 		});
-
-		this.platform.registerBackButtonAction(() => {
-
-		});
-
-	}
-
-	ionViewDidLoad() {
-
 	}
 
 	ionViewWillLeave() {
@@ -84,7 +76,7 @@ export class MyApp {
 	}
 
 	ionViewWillUnload() {
-		if(this.authProvider.afAuth.auth.currentUser != null) {
+		if (this.authProvider.afAuth.auth.currentUser != null) {
 			this.authProvider.logout();
 		}
 	}
@@ -125,9 +117,25 @@ export class MyApp {
 		}
 	}
 
-	openPaymentModal() {
-		let paymentModal = this.modalCtrl.create('PaymentPage');
-		paymentModal.present();
+	openPaymentModal(data: IPayment) {
+		console.log('Opening payment modal');
+		const paymentModal = this.modalCtrl.create('PaymentPage', data);
+		paymentModal.present().then(() => console.log('Payment modal presented')).catch(error => console.log('Error opening payment modal: ', JSON.parse(error)));
+	}
+
+	showCreditAlert(data) {
+		const source = data.source;
+		const amount = data.amount;
+		const description = data.description;
+
+		this.dbProvider.getObject(`accounts/${source}`).take(1).subscribe(account => {
+			let alert = this.alertCtrl.create({
+				title: 'New Credit Transaction',
+				subTitle: `You received ${amount.value} ${amount.currency} from ${account.name}.`,
+				buttons: ['OK']
+			});
+			alert.present();
+		});
 	}
 
 	setupCloudMessaging() {
@@ -141,11 +149,25 @@ export class MyApp {
 		this.fcm.onNotification().subscribe(data => {
 			if (data.wasTapped) {
 				console.log("Received in background");
-				console.log(JSON.stringify(data));
+				const message = JSON.parse(data.message);
+				if (data.title === 'Debit') {
+					this.openPaymentModal(message);
+				}
+				else if (data.title === 'Credit') {
+					this.showCreditAlert(message);
+				}
+				console.log(data.message);
+
 			} else {
 				console.log("Received in foreground");
-				console.log(JSON.stringify(data.message));
-				this.openPaymentModal();
+				const message = JSON.parse(data.message);
+				if (data.title === 'Debit') {
+					this.openPaymentModal(message);
+				}
+				else if (data.title === 'Credit') {
+					this.showCreditAlert(message);
+				}
+				console.log(data.message);
 			};
 		}, error => {
 			console.log('Error getting notification: ', error);
@@ -192,7 +214,7 @@ export class MyApp {
 	updateToken(token) {
 		this.authProvider.getAccount$().subscribe(account => {
 			if (account) {
-				this.dbProvider.setObject(`fcmTokens/`, { [account.address]: token });
+				this.dbProvider.updateObject(`fcmTokens/`, { [account.address]: token });
 			}
 		}, error => {
 			console.log('Error updating messaging token: ', error);
